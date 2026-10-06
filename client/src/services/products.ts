@@ -1,4 +1,4 @@
-/* 3220089_3220172 — color-ready client model. Backend persistence is a separate stage. */
+/* Marketplace-ready catalog model with variants, colors, stock and reviews. */
 import { apiFetch } from "./api";
 import { locale } from "../i18n/locale";
 
@@ -43,7 +43,6 @@ export interface Product {
   active?: boolean;
   merchandisingTag?: "none" | "new" | "featured" | "best_seller" | "limited" | string;
   badge?: string;
-  customQr?: boolean;
   createdAt?: string;
   updatedAt?: string;
   variants?: ProductVariant[];
@@ -106,7 +105,6 @@ export function normalizeProduct(raw: any): Product {
     active: raw?.active !== false,
     merchandisingTag: raw?.merchandisingTag || "none",
     badge: raw?.badge || "",
-    customQr: Boolean(raw?.customQr),
     createdAt: raw?.createdAt || "",
     updatedAt: raw?.updatedAt || "",
     variants: Array.isArray(raw?.variants) ? raw.variants : [],
