@@ -124,7 +124,7 @@ export const checkoutSchema = z.object({
     addressLine2: z.string().trim().max(180).optional().default(""),
   }),
 
-  delivery: z.enum(["home", "boxnow"]).optional().default("home"),
+  delivery: z.enum(["home"]).optional().default("home"),
 
   locker: z.string().trim().max(160).optional().nullable(),
 
@@ -171,20 +171,7 @@ export const checkoutSchema = z.object({
     });
   }
 
-  // BOX NOW does not require a home shipping address
-  if (checkout.delivery === "boxnow") {
-    if (!String(checkout.locker || "").trim()) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["locker"],
-        message: "BOX NOW locker is required",
-      });
-    }
-
-    return;
-  }
-
-  // Home delivery requires a complete shipping address
+  // Standard home delivery requires a complete shipping address
   const { country, city, postalCode, addressLine1 } =
     checkout.shippingAddress;
 

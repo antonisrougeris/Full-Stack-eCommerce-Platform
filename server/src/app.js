@@ -31,14 +31,11 @@ import cartRoutes from "./routes/cart.routes.js";
 import checkoutRoutes from "./routes/checkout.routes.js";
 import ordersRoutes from "./routes/orders.routes.js";
 import returnsRoutes from "./routes/returns.routes.js";
-import qrRoutes from "./routes/qr.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import reviewRoutes from "./routes/review.routes.js";
 import vivaRoutes from "./routes/viva.routes.js";
 import sitemapRoutes from "./routes/sitemap.routes.js";
 import seoProductRoutes from "./routes/seo-product.routes.js";
-import boxNowTestRoutes from "./routes/boxnow-test.routes.js";
-import boxNowRoutes from "./routes/boxnow.routes.js";
 import resendRoutes from "./routes/resend.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
 import {
@@ -94,7 +91,6 @@ app.use(
     limit: "100kb",
     verify: (req, _res, buf) => {
       if (
-        req.originalUrl?.startsWith("/api/boxnow/webhook") ||
         req.originalUrl?.startsWith("/api/resend/webhook")
       ) {
         req.rawBody = Buffer.from(buf);
@@ -123,13 +119,12 @@ app.use(cookieParser(cookieSigningSecret));
  * a browser CSRF token. Mount them before browser CSRF protection.
  */
 app.use("/api/viva", webhookLimiter, vivaRoutes);
-app.use("/api/boxnow", webhookLimiter, boxNowRoutes);
 app.use("/api/resend", webhookLimiter, resendRoutes);
 app.use("/api/contact", contactLimiter, contactRoutes);
 
 /*
  * Lusca requires req.session because it stores the server-side CSRF secret
- * there. Skanare does not otherwise use Express sessions, so persist only
+ * there. This storefront does not otherwise use Express sessions, so persist only
  * that small secret in a signed, HttpOnly cookie instead of adding a
  * server-side session store.
  */
@@ -225,12 +220,8 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/orders", ordersRoutes);
 app.use("/api/returns", returnsRoutes);
-app.use("/api/qr-codes", qrRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/reviews", reviewRoutes);
-if (process.env.NODE_ENV !== "production") {
-  app.use("/api/test-boxnow", boxNowTestRoutes);
-}
 
 app.use(notFound);
 app.use(errorHandler);

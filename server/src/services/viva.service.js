@@ -129,7 +129,7 @@ const failureUrl =
     disableCash: true,
     disableWallet: false,
 
-    tags: ["skanare", order.id],
+    tags: [process.env.STORE_SLUG || "novastore", order.id],
 
     successUrl,
     failureUrl,
