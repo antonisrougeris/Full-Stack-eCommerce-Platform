@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Skanare Admin</title>
-  <link rel="icon" type="image/webp" href="/assets/img/skanare-logo.webp" />
+  <title>NovaStore Admin</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/img/brand-mark.svg" />
   <link rel="stylesheet" href="./admin.css" />
 
   <!-- New admin UI styles kept here so admin.css does not need to change yet. -->
@@ -203,8 +203,8 @@
   <section id="adminLogin" class="admin-login">
     <div class="admin-login__panel">
       <div class="admin-login__brand">
-        <img src="/assets/img/skanare-logo.webp" alt="Skanare" />
-        <span>SKANARE</span>
+        <img src="/assets/img/brand-mark.svg" alt="NovaStore" />
+        <span>NOVASTORE</span>
       </div>
       <span class="admin-eyebrow">Private administration</span>
       <h1>Admin access</h1>
@@ -222,8 +222,8 @@
   <div id="adminApp" class="admin-shell hidden">
     <aside class="admin-sidebar">
       <div class="admin-sidebar__brand">
-        <img src="/assets/img/skanare-logo.webp" alt="" />
-        <div><strong>SKANARE</strong><span>ADMIN</span></div>
+        <img src="/assets/img/brand-mark.svg" alt="" />
+        <div><strong>NOVASTORE</strong><span>ADMIN</span></div>
       </div>
 
       <nav class="admin-nav">
@@ -246,7 +246,7 @@
 
     <main class="admin-main">
       <header class="admin-topbar">
-        <div><span class="admin-eyebrow">Skanare administration</span><h1 id="adminPageTitle">Dashboard</h1></div>
+        <div><span class="admin-eyebrow">NovaStore administration</span><h1 id="adminPageTitle">Dashboard</h1></div>
         <div class="admin-topbar__right">
           <button id="adminRefresh" class="admin-icon-button" type="button" title="Refresh">↻</button>
           <div class="admin-user"><span class="admin-user__dot"></span><div><strong id="adminUserEmail">Admin</strong><span>Administrator</span></div></div>
@@ -259,7 +259,7 @@
           <article class="admin-stat"><span>Revenue</span><strong id="statRevenue">—</strong><small>Paid orders</small></article>
           <article class="admin-stat"><span>Orders</span><strong id="statOrders">—</strong><small>Total orders</small></article>
           <article class="admin-stat"><span>Customers</span><strong id="statCustomers">—</strong><small>Registered users</small></article>
-          <article class="admin-stat"><span>Active QRs</span><strong id="statQr">—</strong><small>Customer QR codes</small></article>
+          <article class="admin-stat"><span>Active QRs</span><strong id="statQr">—</strong><small>Customer products</small></article>
         </div>
         <div class="admin-section">
           <div class="admin-section__header">
@@ -337,7 +337,7 @@
           <div>
             <span class="admin-eyebrow">Customer support</span>
             <h2>Contact messages</h2>
-            <p>Read and reply to messages submitted from the Skanare contact form.</p>
+            <p>Read and reply to messages submitted from the NovaStore contact form.</p>
           </div>
           <button id="refreshMessages" class="admin-text-button" type="button">Refresh ↻</button>
         </div>
@@ -470,7 +470,7 @@
         <div class="admin-checkbox-row">
           <label><input id="productFeatured" type="checkbox" /> Show on homepage</label>
           <label><input id="productActive" type="checkbox" checked /> Active</label>
-          <label><input id="productCustomQr" type="checkbox" checked /> Custom QR product</label>
+          <label><input id="productCustomQr" type="checkbox" checked /> Custom product</label>
         </div>
 
         <div class="admin-subsection">
@@ -530,7 +530,7 @@
           </div>
           <p class="variant-helper">
             This is the small made-to-order stock you are willing to sell even when that exact QR is not already prepared.
-            It does <strong>not</strong> generate QR codes. Ready physical QR inventory is created later with <strong>Add QR stock</strong>.
+            It does <strong>not</strong> generate products. Ready physical QR inventory is created later with <strong>Add QR stock</strong>.
             For T-shirts, add each color above; its size rows will be created automatically. Existing SKUs remain locked for inventory compatibility.
           </p>
           <div id="variantRows"></div>
