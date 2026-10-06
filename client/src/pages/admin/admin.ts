@@ -1369,13 +1369,7 @@ function openProductModal(product: any = null) {
   setInputValue("productMerchandisingTag", product?.merchandisingTag || "none");
   setChecked("productFeatured", Boolean(product?.featured));
   setChecked("productActive", product?.active !== false);
-  setChecked("productCustomQr", product?.customQr !== false);
 
-  setInputValue("qrTextPrint", product?.qrConfig?.textPrint ?? "");
-  setInputValue("qrTextPosition", product?.qrConfig?.textPosition || "bottom");
-  setInputValue("qrColor", product?.qrConfig?.qrColor || product?.qrConfig?.color || "#000000");
-  setInputValue("qrTextColor", product?.qrConfig?.textColor || product?.qrConfig?.qrColor || "#000000");
-  setInputValue("qrPrintSize", product?.qrConfig?.size || 3540);
 
   existingProductImages = Array.isArray(product?.images) ? [...product.images] : [];
   pendingProductImageFiles = [];
@@ -1429,7 +1423,6 @@ function resetProductForm() {
 
   setChecked("productFeatured", false);
   setChecked("productActive", true);
-  setChecked("productCustomQr", true);
   setInputValue("productDiscountPercent", 0);
   setInputValue("productMerchandisingTag", "none");
 
@@ -1438,11 +1431,6 @@ function resetProductForm() {
   setInputValue("productShortDescriptionEl", "");
   setInputValue("productDescriptionEl", "");
 
-  setInputValue("qrTextPrint", "");
-  setInputValue("qrTextPosition", "bottom");
-  setInputValue("qrColor", "#000000");
-  setInputValue("qrTextColor", "#000000");
-  setInputValue("qrPrintSize", 3540);
 
   document.getElementById("variantRows")?.replaceChildren();
 
@@ -2001,14 +1989,6 @@ function collectProductPayload() {
     merchandisingTag: inputValue("productMerchandisingTag") || "none",
     featured: checked("productFeatured"),
     active: checked("productActive"),
-    customQr: checked("productCustomQr"),
-    qrConfig: {
-      textPrint: inputValue("qrTextPrint") ?? "",
-      textPosition: inputValue("qrTextPosition") === "top" ? "top" : "bottom",
-      qrColor: inputValue("qrColor") || "#000000",
-      textColor: inputValue("qrTextColor") || "#000000",
-      size: Number(inputValue("qrPrintSize") || 3540),
-    },
     images: [...existingProductImages],
     colorOptions: colorDrafts.map(c => ({name:c.name, hex:c.hex, images:[...c.images]})),
     defaultColor: defaultProductColor || colorDrafts[0]?.name || "",
