@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "full-stack-ecommerce-client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,11 +11,9 @@
   "dependencies": {
     "firebase": "^12.6.0",
     "libphonenumber-js": "^1.13.9",
-    "qrcode": "^1.5.4",
     "sonner": "^2.0.7"
   },
   "devDependencies": {
-    "@types/qrcode": "^1.5.6",
     "typescript": "~5.9.3",
     "vite": "^7.3.6"
   }
