@@ -4,7 +4,6 @@ import {
   assertPositiveInteger,
   assertString,
   normalizeVariantInput,
-  optionalUrl,
   giftOptionsSchema,
   parseOrThrow,
 } from "../utils/validators.js";
@@ -16,32 +15,71 @@ import {
   updateCartGiftOptions,
   copyUserCartToGuestCart,
 } from "../services/cart.service.js";
+import { createGuestId, setGuestCookie } from "../middleware/guestSession.js";
 
-import {
-  createGuestId,
-  setGuestCookie,
-} from "../middleware/guestSession.js";
+function getCartOwner(req, res) {
+  if (req.user?.uid) return { type: "user", id: req.user.uid };
+  if (req.guestId) return { type: "guest", id: req.guestId };
+
+  const guestId = createGuestId();
+  setGuestCookie(res, guestId);
+  req.guestId = guestId;
+  return { type: "guest", id: guestId };
+}
 
 export const getCart = asyncHandler(async (req, res) => {
   const owner = getCartOwner(req, res);
+  return ok(res, { cart: await getCartByUserId(owner.id) });
+});
 
-const cart = await getCartByUserId(owner.id);
+export const addToCart = asyncHandler(async (req, res) => {
+  const owner = getCartOwner(req, res);
+  const cart = await addCartItem({
+    userId: owner.id,
+    productId: assertString(req.body?.productId, "productId"),
+    quantity: assertPositiveInteger(req.body?.quantity, "quantity"),
+    selectedVariant: normalizeVariantInput(req.body?.variant),
+  });
+  return ok(res, { cart }, 201);
+});
 
+export const patchCartItem = asyncHandler(async (req, res) => {
+  const owner = getCartOwner(req, res);
+  const cart = await updateCartItem({
+    userId: owner.id,
+    itemId: assertString(req.params.itemId, "itemId"),
+    quantity: assertPositiveInteger(req.body?.quantity, "quantity"),
+  });
   return ok(res, { cart });
 });
 
+export const patchCartGiftOptions = asyncHandler(async (req, res) => {
+  const owner = getCartOwner(req, res);
+  const giftOptions = parseOrThrow(
+    giftOptionsSchema,
+    req.body,
+    "Invalid gift options"
+  );
+  return ok(res, {
+    cart: await updateCartGiftOptions({ userId: owner.id, giftOptions }),
+  });
+});
+
+export const deleteCartItem = asyncHandler(async (req, res) => {
+  const owner = getCartOwner(req, res);
+  return ok(res, {
+    cart: await removeCartItem({
+      userId: owner.id,
+      itemId: assertString(req.params.itemId, "itemId"),
+    }),
+  });
+});
+
 export const transferCartToGuest = asyncHandler(async (req, res) => {
-  if (!req.user?.uid) {
-    throw new Error("Missing authenticated user");
-  }
+  if (!req.user?.uid) throw new Error("Missing authenticated user");
 
   let guestId = req.guestId;
-
   if (!guestId) {
-    const { createGuestId, setGuestCookie } = await import(
-      "../middleware/guestSession.js"
-    );
-
     guestId = createGuestId();
     setGuestCookie(res, guestId);
   }
@@ -53,97 +91,3 @@ export const transferCartToGuest = asyncHandler(async (req, res) => {
 
   return ok(res, { cart, guestId });
 });
-
-export const addToCart = asyncHandler(async (req, res) => {
-  const productId = assertString(req.body?.productId, "productId");
-  const quantity = assertPositiveInteger(req.body?.quantity, "quantity");
-  const variant = normalizeVariantInput(req.body?.variant);
-  const qrDestination = optionalUrl(req.body?.qrDestination, "qrDestination");
-
-  const owner = getCartOwner(req, res);
-
-  const cart = await addCartItem({
-    userId: owner.id, // 🔥 reuse same field
-    productId,
-    quantity,
-    selectedVariant: variant,
-    qrDestination,
-  });
-  
-
-  return ok(res, { cart }, 201);
-});
-
-export const patchCartItem = asyncHandler(async (req, res) => {
-  const itemId = assertString(req.params.itemId, "itemId");
-  const quantity = assertPositiveInteger(req.body?.quantity, "quantity");
-  const qrDestination = optionalUrl(req.body?.qrDestination, "qrDestination");
-
-  const owner = getCartOwner(req, res);
-
-const cart = await updateCartItem({
-  userId: owner.id,
-  itemId,
-  quantity,
-  qrDestination,
-});
-
-
-  return ok(res, { cart });
-});
-
-export const patchCartGiftOptions = asyncHandler(async (req, res) => {
-  const owner = getCartOwner(req, res);
-  const giftOptions = parseOrThrow(
-    giftOptionsSchema,
-    req.body,
-    "Invalid gift options"
-  );
-
-  const cart = await updateCartGiftOptions({
-    userId: owner.id,
-    giftOptions,
-  });
-
-  return ok(res, { cart });
-});
-
-export const deleteCartItem = asyncHandler(async (req, res) => {
-  const itemId = assertString(req.params.itemId, "itemId");
-
-  const owner = getCartOwner(req, res);
-
-const cart = await removeCartItem({
-  userId: owner.id,
-  itemId,
-});
-
-
-  return ok(res, { cart });
-});
-
-
-function getCartOwner(req, res) {
-  if (req.user?.uid) {
-    return {
-      type: "user",
-      id: req.user.uid,
-    };
-  }
-
-  if (req.guestId) {
-    return {
-      type: "guest",
-      id: req.guestId,
-    };
-  }
-
-  const guestId = createGuestId();
-  setGuestCookie(res, guestId);
-  req.guestId = guestId;
-
-  return {
-    type: "guest",
-    id: guestId,
-  };
-}
