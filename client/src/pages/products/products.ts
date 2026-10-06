@@ -44,7 +44,7 @@ interface Product {
 }
 
 const API_BASE =
-  import.meta.env?.VITE_API_BASE_URL || "https://cldrq5-4000.csb.app/api";
+  import.meta.env?.VITE_API_BASE_URL || "/api";
 
 async function getProducts(
   params: { q?: string; category?: string } = {}

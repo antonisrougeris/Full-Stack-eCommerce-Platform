@@ -126,8 +126,6 @@ export function normalizePublicPath(
       "/forgot-password",
     "/src/pages/verify-email/verify-email.html":
       "/verify-email",
-    "/src/pages/my-qr/my-qr.html":
-      "/my-qr",
     "/src/pages/contact/contact.html":
       "/contact",
     "/src/pages/about/about.html":
