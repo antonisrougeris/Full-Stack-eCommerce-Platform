@@ -1,6 +1,6 @@
 import "../../i18n/auto";
 import { locale, localizedPath } from "../../i18n/locale";
-const CHECKOUT_DRAFT_KEY = "skanare_checkout_draft";
+const CHECKOUT_DRAFT_KEY = "commerce_checkout_draft";
 
 const CHECKOUT_URL = localizedPath("/checkout", locale);
 
