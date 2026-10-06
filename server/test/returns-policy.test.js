@@ -5,7 +5,7 @@ import {
   advanceReturnStatus,
   getOrderReturnEligibility,
   getReturnWindowDays,
-  mapBoxNowReturnEvent,
+  mapReturnShippingEvent,
 } from "../src/services/returns-policy.service.js";
 
 const order = {
@@ -34,10 +34,10 @@ test("rejects expired return window", () => {
   assert.equal(result.reasonCode, "window_expired");
 });
 
-test("maps BOX NOW customer return lifecycle", () => {
-  assert.equal(mapBoxNowReturnEvent("accepted-for-return"), "dropped_off");
-  assert.equal(mapBoxNowReturnEvent("in-transit"), "in_transit");
-  assert.equal(mapBoxNowReturnEvent("returned"), "refund_pending");
+test("maps shipping-provider return lifecycle", () => {
+  assert.equal(mapReturnShippingEvent("accepted-for-return"), "dropped_off");
+  assert.equal(mapReturnShippingEvent("in-transit"), "in_transit");
+  assert.equal(mapReturnShippingEvent("returned"), "refund_pending");
 });
 
 test("does not regress return status", () => {
