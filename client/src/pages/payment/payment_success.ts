@@ -10,7 +10,6 @@ interface Order {
   currency?: string;
   paymentStatus?: string;
   status?: string;
-  qrCodesCreated?: number;
   createdAt?: string;
   payment?: {
     paidAt?: string;
@@ -143,11 +142,6 @@ async function loadOrder(): Promise<void> {
       <div class="payment-summary-row">
         <span>${t("payment.status", "Payment Status")}</span>
         <strong>${order.paymentStatus || order.status || "paid"}</strong>
-      </div>
-
-      <div class="payment-summary-row">
-        <span>${t("payment.qrCreated", "QR Products Created")}</span>
-        <strong>${order.qrCodesCreated || 0}</strong>
       </div>
 
       <div class="payment-summary-row">
