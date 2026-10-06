@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1400" role="img" aria-label="Everyday Cap">
+  <rect width="1200" height="1400" fill="#e7e5e0"/>
+  <rect x="110" y="110" width="980" height="1180" rx="48" fill="none" stroke="#232323" stroke-opacity=".08" stroke-width="3"/>
+  <path d="M320 700c35-250 180-380 330-380 190 0 330 135 350 345-120-45-240-65-360-60-130 5-235 42-320 95Z" fill="#232323" fill-opacity=".9"/><path d="M650 604c250 0 390 70 410 125-175 44-362 54-560 28-108-14-160-45-180-57 90-62 200-96 330-96Z" fill="#232323" fill-opacity=".72"/>
+  <text x="600" y="1170" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="700" letter-spacing="8" fill="#232323">EVERYDAY CAP</text>
+  <text x="600" y="1235" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="26" letter-spacing="4" fill="#232323" fill-opacity=".6">STONE COTTON</text>
+</svg>

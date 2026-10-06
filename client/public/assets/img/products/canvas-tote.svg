@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1400" role="img" aria-label="Canvas Tote">
+  <rect width="1200" height="1400" fill="#eee8dd"/>
+  <rect x="110" y="110" width="980" height="1180" rx="48" fill="none" stroke="#25221e" stroke-opacity=".08" stroke-width="3"/>
+  <path d="M355 500h490l70 560H285l70-560Z" fill="#25221e" fill-opacity=".9"/><path d="M455 520c0-145 65-230 145-230s145 85 145 230" fill="none" stroke="#25221e" stroke-width="56" stroke-linecap="round"/>
+  <text x="600" y="1170" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="700" letter-spacing="8" fill="#25221e">CANVAS TOTE</text>
+  <text x="600" y="1235" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="26" letter-spacing="4" fill="#25221e" fill-opacity=".6">NATURAL CANVAS</text>
+</svg>
