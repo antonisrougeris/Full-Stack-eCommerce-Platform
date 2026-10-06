@@ -1,0 +1,89 @@
+<!-- 3220089_3220172 // 2025 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Skanare - Cart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/webp" href="/assets/img/logo_Image.png">
+
+  <link rel="stylesheet" href="/assets/css/reset.css" />
+  <link rel="stylesheet" href="/assets/css/theme.css" />
+  <link rel="stylesheet" href="/assets/css/layout.css" />
+  <link rel="stylesheet" href="/assets/css/components.css?v=2.0" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <button
+        id="menuToggle"
+        class="menu-toggle"
+        type="button"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="mainNav"
+      >
+        ☰
+      </button>
+
+      <nav id="mainNav" class="main-nav">
+        <div class="nav-left">
+          <a href="/products?category=tshirt">QR Clothing</a>
+          <a href="/products?category=accessory">QR Accessories</a>
+        </div>
+
+        <div class="nav-right">
+          <a href="/index.html#how">How it works</a>
+
+          <a href="/src/pages/login/login.html" class="icon-link" aria-label="Login or register">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"></path>
+            </svg>
+          </a>
+        </div>
+      </nav>
+
+      <a href="/index.html" class="logo">
+        <img class="logo-img" src="/assets/img/logo_Image.png" alt="Skanare logo" />
+        <span class="logo-text">Skanare</span>
+      </a>
+
+      <a href="/src/pages/cart/cart.html" class="cart-link active" aria-label="Cart" data-cart-link>
+        <svg stroke-width="1.6" width="22" height="22" viewBox="0 0 22 22">
+          <path
+            d="M14.666 7.333a3.666 3.666 0 1 1-7.333 0M3.33 6.785l-.642 7.7c-.137 1.654-.206 2.48.073 3.119a2.75 2.75 0 0 0 1.21 1.314c.612.332 1.442.332 3.102.332h7.853c1.66 0 2.49 0 3.103-.332a2.75 2.75 0 0 0 1.21-1.314c.279-.638.21-1.465.072-3.12l-.642-7.7c-.118-1.423-.178-2.134-.493-2.673A2.75 2.75 0 0 0 16.99 3.02c-.563-.269-1.277-.269-2.705-.269h-6.57c-1.428 0-2.142 0-2.705.27A2.75 2.75 0 0 0 3.823 4.11c-.315.539-.374 1.25-.493 2.674Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <main class="container page-content">
+    <h1 class="section-title">Your Cart</h1>
+    <p id="cartLoading" class="meta">Loading your cart...</p>
+    <p id="cartError" class="meta" style="color:#dc2626;" hidden>Failed to load cart.</p>
+
+    <section id="cartContent"></section>
+  </main>
+
+  <div id="cartOverlay" class="cart-overlay hidden"></div>
+
+  <aside id="cartDrawer" class="cart-drawer hidden">
+    <header class="cart-header">
+      <h2>Your Cart</h2>
+      <button id="closeCart" type="button">✕</button>
+    </header>
+
+    <div id="cartDrawerContent"></div>
+  </aside>
+
+  <script type="module" src="/src/pages/cart/cart.ts"></script>
+</body>
+</html>
