@@ -48,7 +48,6 @@ type ReturnRequest = {
     variant?: { size?: string; color?: string } | null;
     reasonLabel?: string;
   }>;
-  boxnow?: { parcelId?: string | null };
   review?: { note?: string };
   createdAt?: string;
 };
@@ -246,7 +245,7 @@ function openReturnForm(order: EligibleOrder): void {
             <div class="return-item__body">
               <div class="return-item__summary">
                 <div>
-                  <div class="return-item__title">${esc(item.title || "Skanare product")}</div>
+                  <div class="return-item__title">${esc(item.title || "Product")}</div>
                   <div class="return-item__details">
                     ${item.variant?.color ? esc(item.variant.color) : ""}
                     ${item.variant?.size ? ` · Size ${esc(item.variant.size)}` : ""}
@@ -471,8 +470,6 @@ function renderReturnHistory(): void {
       const status = String(request.status || "requested");
       const stepIndex = statusSteps.indexOf(status);
       const canCancel = ["requested", "provider_failed"].includes(status);
-      const canDownload = Boolean(request.boxnow?.parcelId) &&
-        !["cancelled", "rejected"].includes(status);
 
       return `
         <article class="return-history-card" id="return-${esc(request.id)}">
@@ -506,9 +503,6 @@ function renderReturnHistory(): void {
             : ""}
 
           <div class="return-history-card__actions">
-            ${canDownload
-              ? `<button class="returns-secondary" type="button" data-download-return="${esc(request.id)}">Download BOX NOW voucher</button>`
-              : ""}
             ${canCancel
               ? `<button class="returns-secondary" type="button" data-cancel-return="${esc(request.id)}">Cancel request</button>`
               : ""}
@@ -537,11 +531,6 @@ function renderReturnHistory(): void {
       });
     });
 
-  historyEl
-    .querySelectorAll<HTMLButtonElement>("[data-download-return]")
-    .forEach((button) => {
-      button.addEventListener("click", () => {
-        void downloadVoucher(button.dataset.downloadReturn || "");
       });
     });
 
@@ -577,7 +566,7 @@ async function downloadVoucher(returnId: string): Promise<void> {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `SKANARE-return-${returnId}.pdf`;
+  link.download = `return-${returnId}.pdf`;
   document.body.appendChild(link);
   link.click();
   link.remove();
