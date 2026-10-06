@@ -7,11 +7,9 @@ import { renderProducts } from "./components/renderProducts";
 import { getProducts } from "./services/products";
 import { updateCartBadge } from "./utils/cart-badge";
 import { firebaseAuth } from "./services/firebase";
-import { getMyQrCodes, updateQrCode, type QrCode } from "./services/qr";
 
 import { initCookieConsent } from "./components/cookieConsent";
 
-import QRCode from "qrcode";
 
 function readCookie(name: string): string | null {
   const prefix = `${encodeURIComponent(name)}=`;
@@ -95,7 +93,7 @@ function initPromoPopup(): void {
 
   if (!overlay || !closeBtn || !copyBtn || !codeEl) return;
 
-  const STORAGE_KEY = "skanare_promo_dismissed";
+  const STORAGE_KEY = "commerce_promo_dismissed";
 
   function closePromo(): void {
     overlay?.classList.add("hidden");
@@ -160,140 +158,6 @@ initCookieConsent();
 initNav();
 initMobileMenu();
 void initGuestSession().then(() => updateCartBadge());
-/* =========================
-   USER QR DASHBOARD
-========================= */
-
-async function renderQrDashboard(grid: HTMLElement, qrCodes: QrCode[]): Promise<void> {
-  function escapeHtml(value: string): string {
-    return value
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  if (!qrCodes.length) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <h3>No QR codes yet</h3>
-        <p>Your QR products will appear here after checkout.</p>
-      </div>
-    `;
-    return;
-  }
-
-  const QR_REDIRECT_BASE_URL =
-    import.meta.env.VITE_QR_REDIRECT_BASE_URL ||
-    "https://redirectqr-qrk4dnnhta-ew.a.run.app";
-
-  const htmlBlocks = await Promise.all(
-    qrCodes.map(async (qr) => {
-      const safeTarget = escapeHtml(qr.targetUrl || "");
-      const title = escapeHtml(qr.productTitle || "QR Product");
-
-      const publicQrId = qr.shortId || qr.id;
-
-      const qrRedirectUrl = `${QR_REDIRECT_BASE_URL}/${encodeURIComponent(publicQrId)}`;
-
-      // 🔥 LOCAL GENERATION (NO API)
-      const qrDataUrl = await QRCode.toDataURL(qrRedirectUrl, {
-        width: 400,              // printing safe
-        margin: 1,
-        color: {
-          dark: "#000000",       // pure black
-          light: "#00000000",      // pure transparent
-        },
-        errorCorrectionLevel: "H",
-      });
-
-      return `
-        <article class="dashboard-card qr-dashboard-card">
-
-          <p class="meta qr-card-meta">QR product</p>
-
-          <img
-            class="qr-dashboard-image"
-            src="${qrDataUrl}"
-            alt="QR code for ${title}"
-            loading="lazy"
-          />
-
-          <h3 class="qr-dashboard-title">${title}</h3>
-          <span class="qr-scan-badge">${qr.scans ?? 0} scans</span>
-
-          <label class="qr-edit-label" for="input-${qr.id}">
-            Destination URL
-          </label>
-
-          <div class="qr-edit-row">
-            <input
-              id="input-${qr.id}"
-              class="qr-edit-input"
-              type="url"
-              value="${safeTarget}"
-              placeholder="https://example.com"
-            />
-            <button
-              type="button"
-              class="btn-primary qr-save-btn"
-              data-qr-id="${qr.id}"
-            >
-              Save
-            </button>
-          </div>
-        </article>
-      `;
-    })
-  );
-
-  grid.innerHTML = htmlBlocks.join("");
-
-
-  grid.querySelectorAll<HTMLButtonElement>(".qr-save-btn").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const qrId = button.dataset.qrId;
-      if (!qrId) return;
-
-      const input = document.getElementById(
-        `input-${qrId}`
-      ) as HTMLInputElement | null;
-
-      const targetUrl = input?.value.trim() || "";
-
-      if (!targetUrl) {
-        alert("Please enter a destination URL.");
-        return;
-      }
-
-      button.disabled = true;
-      const originalText = button.textContent || "Save";
-      button.textContent = "Saving...";
-
-      try {
-        await updateQrCode(qrId, targetUrl);
-        button.textContent = "Saved";
-
-        setTimeout(() => {
-          button.textContent = originalText;
-          button.disabled = false;
-        }, 1200);
-      } catch (error) {
-        console.error("Failed to update QR code:", error);
-        alert(
-          error instanceof Error
-            ? error.message
-            : "Failed to update QR destination."
-        );
-        button.textContent = originalText;
-        button.disabled = false;
-      }
-    });
-  });
-}
-
-
 /* =========================================================
    CUSTOMER ORDERS
    ========================================================= */
@@ -715,7 +579,7 @@ function renderCustomerOrders(
         const title =
           item?.title ||
           item?.productTitle ||
-          "Skanare product";
+          "Product";
 
         const size =
           item?.variant?.size ||
@@ -933,178 +797,38 @@ function renderCustomerOrders(
       .join("");
 }
 async function loadUserAccountDashboard(): Promise<void> {
-
-  const dashboard =
-    document.getElementById(
-      "userDashboardHero"
-    );
-
-  const defaultHero =
-    document.getElementById(
-      "defaultHero"
-    );
-
-  const qrGrid =
-    document.getElementById(
-      "userQrGrid"
-    ) as HTMLElement | null;
-
-  const qrSection =
-    document.getElementById(
-      "userQrSection"
-    );
-
+  const dashboard = document.getElementById("userDashboardHero");
+  const defaultHero = document.getElementById("defaultHero");
 
   try {
-
-    /*
-     * Orders and QR are loaded independently.
-     * If one endpoint fails, the other part
-     * of the account dashboard can still work.
-     */
-
-    const [
-      ordersResult,
-      qrResult,
-    ] =
-      await Promise.allSettled([
-        getOrders(),
-        getMyQrCodes(),
-      ]);
-
-
-    const rawOrders: any =
-      ordersResult.status ===
-      "fulfilled"
-        ? ordersResult.value
+    const rawOrders = await getOrders();
+    const orders: any[] = Array.isArray(rawOrders)
+      ? rawOrders
+      : Array.isArray((rawOrders as any)?.orders)
+        ? (rawOrders as any).orders
         : [];
 
-
-    const orders: any[] =
-      Array.isArray(rawOrders)
-        ? rawOrders
-        : Array.isArray(
-            rawOrders?.orders
-          )
-          ? rawOrders.orders
-          : [];
-
-
-    const qrCodes: QrCode[] =
-      qrResult.status ===
-      "fulfilled" &&
-      Array.isArray(
-        qrResult.value
-      )
-        ? qrResult.value
-        : [];
-
-
-    const hasAccountData =
-      orders.length > 0 ||
-      qrCodes.length > 0;
-
-
-    /*
-     * No orders and no QR:
-     * show normal marketing homepage.
-     */
-
-    if (!hasAccountData) {
-
-      dashboard?.classList.add(
-        "hidden"
-      );
-
-      defaultHero?.classList.remove(
-        "hidden"
-      );
-
+    if (!orders.length) {
+      dashboard?.classList.add("hidden");
+      defaultHero?.classList.remove("hidden");
       return;
     }
 
-
-    /*
-     * Customer has activity:
-     * show customer dashboard.
-     */
-
-    dashboard?.classList.remove(
-      "hidden"
-    );
-
-    defaultHero?.classList.add(
-      "hidden"
-    );
-
-
-    /*
-     * Orders
-     */
-
-    renderCustomerOrders(
-      orders
-    );
-
-
-    /*
-     * QR codes
-     */
-
-    if (
-      qrGrid &&
-      qrCodes.length
-    ) {
-
-      qrSection?.classList.remove(
-        "hidden"
-      );
-
-      await renderQrDashboard(
-        qrGrid,
-        qrCodes
-      );
-
-    } else {
-
-      qrSection?.classList.add(
-        "hidden"
-      );
-
-      if (qrGrid) {
-        qrGrid.innerHTML = "";
-      }
-    }
-
-
+    dashboard?.classList.remove("hidden");
+    defaultHero?.classList.add("hidden");
+    renderCustomerOrders(orders);
   } catch (error) {
-
-    console.error(
-      "Failed to load customer dashboard:",
-      error
-    );
-
-    dashboard?.classList.add(
-      "hidden"
-    );
-
-    defaultHero?.classList.remove(
-      "hidden"
-    );
+    console.error("Failed to load customer dashboard:", error);
+    dashboard?.classList.add("hidden");
+    defaultHero?.classList.remove("hidden");
   }
 }
 
 function resetLoggedOutHomepageState(): void {
   const dashboardHero = document.getElementById("userDashboardHero");
   const defaultHero = document.getElementById("defaultHero");
-  const grid = document.getElementById("userQrGrid");
-
   dashboardHero?.classList.add("hidden");
   defaultHero?.classList.remove("hidden");
-
-  if (grid) {
-    grid.innerHTML = "";
-  }
 
   const orders =
   document.getElementById(

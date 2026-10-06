@@ -19,6 +19,7 @@ import { createProductReview, getProductReviews } from "../../services/reviews";
 
 import { showToast } from "../../utils/toast.ts";
 import { productPath, t } from "../../i18n/locale";
+import { STORE_NAME } from "../../config/store";
 
 
 initNav();
@@ -481,7 +482,6 @@ async function renderRelatedProducts(currentProduct: Product): Promise<void> {
               productId: product.id,
               quantity: 1,
               variant: selectedVariant || null,
-              qrDestination: "https://skanare.com",
             });
 
             await updateCartBadge();
@@ -561,9 +561,6 @@ const id = getProductIdentifier();
   const thumbnailsEl = document.getElementById(
     "productThumbnails"
   ) as HTMLElement | null;
-  const qrDestinationInput = document.getElementById(
-    "qrDestination"
-  ) as HTMLInputElement | null;
   const addBtn = document.getElementById(
     "productAddToCartBtn"
   ) as HTMLButtonElement | null;
@@ -632,14 +629,14 @@ const id = getProductIdentifier();
   throw new Error("This product is no longer available.");
 }
 
-document.title = `${product.title} | Skanare`;
+document.title = `${product.title} | ${STORE_NAME}`;
 
 
 
 const description =
   product.shortDescription ||
   product.description ||
-  "QR clothing and accessories by Skanare.";
+  "A quality product from ${STORE_NAME}.";
 
 
 const productIdentifier = product.slug || product.id;
@@ -662,17 +659,17 @@ canonical.href = productUrl;
 const productImage =
   product.images?.[0] ||
   product.image ||
-  "https://skanare.com/assets/img/logo_Image.png";
+  "";
 
 setMetaName("description", description);
 
-setMetaProperty("og:title", `${product.title} | Skanare`);
+setMetaProperty("og:title", `${product.title} | ${STORE_NAME}`);
 setMetaProperty("og:description", description);
 setMetaProperty("og:image", productImage);
 setMetaProperty("og:url", productUrl);
 setMetaProperty("og:type", "product");
 
-setMetaName("twitter:title", `${product.title} | Skanare`);
+setMetaName("twitter:title", `${product.title} | ${STORE_NAME}`);
 setMetaName("twitter:description", description);
 setMetaName("twitter:image", productImage);
 
@@ -682,8 +679,8 @@ injectProductSchema(product);
     setText(
       metaEl,
       product.category === "tshirt"
-        ? "T-Shirt • Custom editable QR"
-        : "Accessory • Custom editable QR"
+        ? "T-Shirt • Premium quality"
+        : "Accessory • Premium quality"
     );
     setText(descEl, product.description || product.shortDescription || "");
 
@@ -1165,34 +1162,6 @@ if (imageStage) {
           return;
         }
 
-        const rawQrDestination =
-          qrDestinationInput?.value.trim() ||
-          "";
-
-        const qrDestination =
-          rawQrDestination ||
-          "https://skanare.com";
-
-        if (
-          rawQrDestination &&
-          /^https?:\/\//i.test(
-            rawQrDestination
-          )
-        ) {
-          try {
-            new URL(
-              rawQrDestination
-            );
-          } catch {
-            showToast(
-              "Please enter a valid URL, for example https://example.com"
-            );
-
-            qrDestinationInput?.focus();
-            return;
-          }
-        }
-
         if (!isInStock(product, selectedVariant)) {
           showToast("This variant is out of stock.");
           return;
@@ -1221,20 +1190,9 @@ if (imageStage) {
             productId: product.id,
             quantity,
             variant: selectedVariant || null,
-            qrDestination,
           });
 
           await updateCartBadge();
-
-          if (!rawQrDestination) {
-            showToast(
-              "Don’t forget to add your own QR URL later.",
-              {
-                placement:
-                  "cart-reminder",
-              }
-            );
-          }
 
           addBtn.textContent =
             t("product.added", "Added to cart!");
@@ -1289,10 +1247,10 @@ function injectProductSchema(product: any): void {
     "@type": "Product",
     name: product.title,
     description: product.description || product.shortDescription || "",
-    image: product.images?.[0] || product.image || "https://skanare.com/assets/img/logo_Image.png",
+    image: product.images?.[0] || product.image || "",
     brand: {
       "@type": "Brand",
-      name: "Skanare"
+      name: STORE_NAME
     },
     offers: {
   "@type": "Offer",
@@ -1304,7 +1262,7 @@ function injectProductSchema(product: any): void {
     : "https://schema.org/OutOfStock",
   seller: {
     "@type": "Organization",
-    name: "Skanare"
+    name: "${STORE_NAME}"
   }
 }
   });

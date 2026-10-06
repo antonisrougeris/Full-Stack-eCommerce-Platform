@@ -163,9 +163,6 @@ function getCartItemVariant(item: CartItem) {
   return item.variant || item.selectedVariant || null;
 }
 
-function getCartItemQr(item: CartItem): string {
-  return item.qrDestination || "";
-}
 
 function getItemAvailableStock(item: CartItem): number {
   const variant = getCartItemVariant(item);
@@ -256,12 +253,10 @@ function renderCartItem(item: CartItem, index: number, catalog: Product[] = []):
   const title = getCartItemTitle(item);
   const image = getCartItemImage(item, catalog);
   const unitPrice = getCartItemUnitPrice(item);
-  const qr = getCartItemQr(item);
   const itemKey = getCartItemKey(item, index);
 
   const sizeText = variant?.size ? `<p>${t("cart.size", "Size")}: ${variant.size}</p>` : "";
   const colorText = variant?.color ? `<p>${t("cart.color", "Color")}: ${variant.color}</p>` : "";
-  const qrText = qr ? `<p>QR-Code: ${qr}</p>` : "";
 
   return `
     <article class="drawer-cart-item" data-item-id="${itemKey}">
@@ -275,7 +270,6 @@ function renderCartItem(item: CartItem, index: number, catalog: Product[] = []):
         <h3>${title}</h3>
         ${sizeText}
         ${colorText}
-        ${qrText}
 
         <div class="drawer-qty">
           <button type="button" class="cart-decrease" data-item-id="${itemKey}">−</button>
@@ -620,7 +614,7 @@ async function refreshAllCartViews(
 
     window.dispatchEvent(
       new CustomEvent(
-        "skanare:cart-updated"
+        "commerce:cart-updated"
       )
     );
   } catch (err) {
@@ -699,10 +693,6 @@ async function changeItemQuantity(
       {
         quantity:
           nextQuantity,
-
-        qrDestination:
-          getCartItemQr(item) ||
-          "https://skanare.com",
       }
     );
 
@@ -906,8 +896,6 @@ return;
             quantity: 1,
             variant:
               selectedVariant,
-            qrDestination:
-              "https://skanare.com",
           });
 
         await refreshAllCartViews(
@@ -1052,7 +1040,7 @@ function closeCartDrawer(): void {
   document.body.classList.remove("cart-open");
 
   window.dispatchEvent(
-    new CustomEvent("skanare:cart-updated")
+    new CustomEvent("commerce:cart-updated")
   );
 
   setTimeout(() => {
