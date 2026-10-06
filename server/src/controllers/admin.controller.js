@@ -1008,59 +1008,6 @@ function cleanReviews(value) {
 }
 
 
-function cleanQrConfig(value) {
-
-  const config =
-    value &&
-    typeof value === "object"
-      ? value
-      : {};
-
-  const qrColor =
-    cleanString(
-      config.qrColor ||
-      config.color ||
-      "#000000",
-      20
-    );
-
-  const textColor =
-    cleanString(
-      config.textColor ||
-      qrColor ||
-      "#000000",
-      20
-    );
-
-  return {
-
-    textPrint:
-      cleanString(
-        config.textPrint ?? "",
-        100
-      ),
-
-    textPosition:
-      config.textPosition === "top"
-        ? "top"
-        : "bottom",
-
-    qrColor,
-
-    textColor,
-
-    size:
-      Math.max(
-        100,
-        cleanInteger(
-          config.size,
-          3540
-        )
-      ),
-  };
-}
-
-
 function safeFileName(value) {
   return String(
     value || "receipt.pdf"
@@ -1359,12 +1306,6 @@ export const updateOrderShipping = asyncHandler(
       trackingUrl:
         cleanString(req.body?.trackingUrl, 1000),
 
-      lockerId:
-        cleanString(req.body?.lockerId, 200),
-
-      lockerName:
-        cleanString(req.body?.lockerName, 300),
-
       updatedAt: nowIso(),
     };
 
@@ -1581,12 +1522,6 @@ export const createAdminProduct =
       const reviews = [];
 
 
-      const qrConfig =
-        cleanQrConfig(
-          req.body?.qrConfig
-        );
-
-
       const slug =
         normalizeProductId({
           id:
@@ -1674,12 +1609,6 @@ export const createAdminProduct =
         active:
           req.body?.active !==
           false,
-
-        customQr:
-          req.body?.customQr !==
-          false,
-
-        qrConfig,
 
         // Color-specific galleries and their default must remain server-persisted.
         colorOptions: colorData.colorOptions,
@@ -1999,34 +1928,12 @@ export const updateAdminProduct =
 
 
       if (
-        req.body?.customQr !==
-        undefined
-      ) {
-        update.customQr =
-          Boolean(
-            req.body.customQr
-          );
-      }
-
-
-      if (
         req.body?.images !==
         undefined
       ) {
         update.images =
           cleanImages(
             req.body.images
-          );
-      }
-
-
-      if (
-        req.body?.qrConfig !==
-        undefined
-      ) {
-        update.qrConfig =
-          cleanQrConfig(
-            req.body.qrConfig
           );
       }
 
