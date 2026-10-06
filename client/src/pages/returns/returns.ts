@@ -1,7 +1,7 @@
 import "../../i18n/auto";
 import { onAuthStateChanged } from "firebase/auth";
 import { initLayout } from "../../components/initLayout";
-import { apiRequest, API_BASE_URL } from "../../services/api";
+import { apiRequest } from "../../services/api";
 import { firebaseAuth } from "../../services/firebase";
 import { locale, t } from "../../i18n/locale";
 
@@ -531,46 +531,11 @@ function renderReturnHistory(): void {
       });
     });
 
-      });
-    });
-
   if (requestedReturnId) {
     document
       .getElementById(`return-${requestedReturnId}`)
       ?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
-}
-
-async function downloadVoucher(returnId: string): Promise<void> {
-  const user = firebaseAuth.currentUser;
-  if (!user) throw new Error("Sign in to download your voucher.");
-
-  const token = await user.getIdToken();
-  const response = await fetch(
-    `${API_BASE_URL}/returns/${encodeURIComponent(returnId)}/label`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: "include",
-    }
-  );
-
-  if (!response.ok) {
-    const payload = await response.json().catch(() => null);
-    window.alert(payload?.message || "Return voucher is not available yet.");
-    return;
-  }
-
-  const blob = await response.blob();
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `return-${returnId}.pdf`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
 }
 
 onAuthStateChanged(firebaseAuth, async (user) => {
