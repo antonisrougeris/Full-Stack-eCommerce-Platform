@@ -1,21 +1,34 @@
 import { Resend } from "resend";
 
-const ALLOWED_INBOUND_RECIPIENTS = new Set([
-  "info@skanare.com",
-  "hello@skanare.com",
-]);
-
-const DEFAULT_FORWARD_TO = "adminskanare@gmail.com";
-const DEFAULT_FORWARD_FROM = "Skanare Forwarding <forward@skanare.com>";
-
 function normalizeAddress(value) {
-  return String(value || "").trim().toLowerCase();
+  return String(value || "")
+    .trim()
+    .toLowerCase();
 }
 
 function extractAddress(value) {
-  const input = String(value || "").trim();
-  const match = input.match(/<([^>]+)>/);
-  return normalizeAddress(match ? match[1] : input);
+  const input =
+    String(value || "").trim();
+
+  const match =
+    input.match(/<([^>]+)>/);
+
+  return normalizeAddress(
+    match ? match[1] : input
+  );
+}
+
+function allowedInboundRecipients() {
+  return new Set(
+    String(
+      process.env
+        .INBOUND_EMAIL_RECIPIENTS ||
+        ""
+    )
+      .split(",")
+      .map(normalizeAddress)
+      .filter(Boolean)
+  );
 }
 
 function escapeHtml(value) {
@@ -27,64 +40,106 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-export function isAllowedInboundRecipient(value) {
-  return ALLOWED_INBOUND_RECIPIENTS.has(extractAddress(value));
+export function isAllowedInboundRecipient(
+  value
+) {
+  const allowed =
+    allowedInboundRecipients();
+
+  /*
+   * Receiving is optional in the marketplace starter. With no configured
+   * recipients, inbound messages are ignored rather than forwarded to a
+   * hard-coded address.
+   */
+  if (!allowed.size) {
+    return false;
+  }
+
+  return allowed.has(
+    extractAddress(value)
+  );
 }
 
 function getResendClient() {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey =
+    process.env.RESEND_API_KEY;
 
   if (!apiKey) {
-    throw new Error("RESEND_API_KEY is missing");
+    throw new Error(
+      "RESEND_API_KEY is missing"
+    );
   }
 
   return new Resend(apiKey);
 }
 
 function getForwardDestination() {
-  return (
-    process.env.INBOUND_EMAIL_FORWARD_TO ||
-    DEFAULT_FORWARD_TO
+  return String(
+    process.env
+      .INBOUND_EMAIL_FORWARD_TO ||
+      ""
   ).trim();
 }
 
 function getForwardSender() {
-  return (
-    process.env.INBOUND_EMAIL_FORWARD_FROM ||
-    DEFAULT_FORWARD_FROM
+  return String(
+    process.env
+      .INBOUND_EMAIL_FORWARD_FROM ||
+      process.env.EMAIL_FROM ||
+      ""
   ).trim();
 }
 
-async function buildForwardAttachments(resend, emailId) {
+async function buildForwardAttachments(
+  resend,
+  emailId
+) {
   const { data, error } =
-    await resend.emails.receiving.attachments.list({
-      emailId,
-    });
+    await resend.emails.receiving
+      .attachments.list({
+        emailId,
+      });
 
   if (error) {
     throw new Error(
-      error.message || "Failed to list inbound email attachments"
+      error.message ||
+        "Failed to list inbound email attachments"
     );
   }
 
-  const items = Array.isArray(data?.data)
-    ? data.data
-    : Array.isArray(data)
-      ? data
-      : [];
+  const items =
+    Array.isArray(data?.data)
+      ? data.data
+      : Array.isArray(data)
+        ? data
+        : [];
 
   return items
-    .filter((item) => item?.download_url && item?.filename)
+    .filter(
+      (item) =>
+        item?.download_url &&
+        item?.filename
+    )
     .map((item) => ({
       path: item.download_url,
       filename: item.filename,
       ...(item.content_id
-        ? { contentId: item.content_id }
+        ? {
+            contentId:
+              item.content_id,
+          }
         : {}),
     }));
 }
 
-function buildForwardHtml({ eventData, email }) {
+function buildForwardHtml({
+  eventData,
+  email,
+}) {
+  const storeName =
+    process.env.STORE_NAME ||
+    "Store";
+
   const originalHtml =
     email?.html ||
     (email?.text
@@ -96,7 +151,7 @@ function buildForwardHtml({ eventData, email }) {
   return `
     <div style="font-family:Arial,sans-serif;line-height:1.5;color:#111">
       <div style="padding:14px 16px;background:#f5f5f5;border-radius:8px;margin-bottom:18px">
-        <strong>Forwarded by Skanare inbound mail</strong><br>
+        <strong>Forwarded by ${escapeHtml(storeName)} inbound mail</strong><br>
         <strong>To:</strong> ${escapeHtml((eventData.to || []).join(", "))}<br>
         <strong>From:</strong> ${escapeHtml(eventData.from || "")}<br>
         <strong>Subject:</strong> ${escapeHtml(eventData.subject || "(no subject)")}
@@ -106,88 +161,138 @@ function buildForwardHtml({ eventData, email }) {
   `;
 }
 
-export async function forwardInboundEmail(eventData) {
+export async function forwardInboundEmail(
+  eventData
+) {
   if (!eventData?.email_id) {
-    throw new Error("Resend inbound event is missing email_id");
+    throw new Error(
+      "Resend inbound event is missing email_id"
+    );
   }
 
-  const recipients = Array.isArray(eventData.to)
-    ? eventData.to
-    : [];
+  const recipients =
+    Array.isArray(eventData.to)
+      ? eventData.to
+      : [];
 
-  const matchedRecipient = recipients.find(
-    isAllowedInboundRecipient
-  );
+  const matchedRecipient =
+    recipients.find(
+      isAllowedInboundRecipient
+    );
 
   if (!matchedRecipient) {
     return {
       forwarded: false,
-      reason: "recipient_not_allowed",
+      reason:
+        "recipient_not_allowed",
     };
   }
 
-  const resend = getResendClient();
+  const destination =
+    getForwardDestination();
 
-  const { data: email, error: emailError } =
+  const sender =
+    getForwardSender();
+
+  if (!destination || !sender) {
+    return {
+      forwarded: false,
+      reason:
+        "forwarding_not_configured",
+    };
+  }
+
+  const resend =
+    getResendClient();
+
+  const {
+    data: email,
+    error: emailError,
+  } =
     await resend.emails.receiving.get(
       eventData.email_id
     );
 
   if (emailError) {
     throw new Error(
-      emailError.message || "Failed to retrieve inbound email"
+      emailError.message ||
+        "Failed to retrieve inbound email"
     );
   }
 
-  const attachments = await buildForwardAttachments(
-    resend,
-    eventData.email_id
-  );
+  const attachments =
+    await buildForwardAttachments(
+      resend,
+      eventData.email_id
+    );
 
-  const subject = eventData.subject
-    ? `[${extractAddress(matchedRecipient)}] ${eventData.subject}`
-    : `[${extractAddress(matchedRecipient)}] (no subject)`;
+  const subject =
+    eventData.subject
+      ? `[${extractAddress(
+          matchedRecipient
+        )}] ${eventData.subject}`
+      : `[${extractAddress(
+          matchedRecipient
+        )}] (no subject)`;
 
-  const result = await resend.emails.send({
-    from: getForwardSender(),
-    to: getForwardDestination(),
-    subject,
-    html: buildForwardHtml({
-      eventData,
-      email,
-    }),
-    ...(email?.text
-      ? {
-          text: [
-            "Forwarded by Skanare inbound mail",
-            `To: ${recipients.join(", ")}`,
-            `From: ${eventData.from || ""}`,
-            `Subject: ${eventData.subject || "(no subject)"}`,
-            "",
-            email.text,
-          ].join("\n"),
-        }
-      : {}),
-    ...(eventData.from
-      ? { replyTo: extractAddress(eventData.from) }
-      : {}),
-    ...(attachments.length
-      ? { attachments }
-      : {}),
-  });
+  const result =
+    await resend.emails.send({
+      from: sender,
+      to: destination,
+      subject,
+      html: buildForwardHtml({
+        eventData,
+        email,
+      }),
+      ...(email?.text
+        ? {
+            text: [
+              "Forwarded inbound mail",
+              `To: ${recipients.join(
+                ", "
+              )}`,
+              `From: ${
+                eventData.from || ""
+              }`,
+              `Subject: ${
+                eventData.subject ||
+                "(no subject)"
+              }`,
+              "",
+              email.text,
+            ].join("\n"),
+          }
+        : {}),
+      ...(eventData.from
+        ? {
+            replyTo:
+              extractAddress(
+                eventData.from
+              ),
+          }
+        : {}),
+      ...(attachments.length
+        ? { attachments }
+        : {}),
+    });
 
   if (result.error) {
     throw new Error(
-      result.error.message || "Failed to forward inbound email"
+      result.error.message ||
+        "Failed to forward inbound email"
     );
   }
 
   return {
     forwarded: true,
     id: result.data?.id || null,
-    to: getForwardDestination(),
-    inboundRecipient: extractAddress(matchedRecipient),
-    attachments: attachments.length,
+    to: destination,
+    inboundRecipient:
+      extractAddress(
+        matchedRecipient
+      ),
+    attachments:
+      attachments.length,
   };
 }
 
@@ -196,21 +301,29 @@ export function verifyResendWebhook({
   headers,
 }) {
   const webhookSecret =
-    process.env.RESEND_WEBHOOK_SECRET;
+    process.env
+      .RESEND_WEBHOOK_SECRET;
 
   if (!webhookSecret) {
-    throw new Error("RESEND_WEBHOOK_SECRET is missing");
+    throw new Error(
+      "RESEND_WEBHOOK_SECRET is missing"
+    );
   }
 
-  const resend = getResendClient();
+  const resend =
+    getResendClient();
 
   return resend.webhooks.verify({
     payload: rawBody,
     headers: {
-      "svix-id": headers["svix-id"],
-      "svix-timestamp": headers["svix-timestamp"],
-      "svix-signature": headers["svix-signature"],
+      "svix-id":
+        headers["svix-id"],
+      "svix-timestamp":
+        headers["svix-timestamp"],
+      "svix-signature":
+        headers["svix-signature"],
     },
-    secret: webhookSecret,
+    secret:
+      webhookSecret,
   });
 }
