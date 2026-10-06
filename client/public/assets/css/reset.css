@@ -1,0 +1,63 @@
+/* 3220089_3220172  2025 */
+
+/* Basic reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove default list & heading styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Form elements */
+input,
+select,
+textarea,
+button {
+  font: inherit;
+  margin: 0;
+}
+
+/* Button reset */
+button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
