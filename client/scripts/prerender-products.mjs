@@ -223,34 +223,35 @@ async function prerenderHomepage() {
   const file = path.join(distDir, "index.html");
   let html = await fs.readFile(file, "utf8");
 
-  const featured = await fetchProducts("featured=true");
+  let featured = await fetchProducts("featured=true");
 
-  const tshirts = featured
-    .filter((product) => String(product?.category || "").toLowerCase() === "tshirt")
-    .slice(0, 4);
+  if (!featured.length) {
+    featured = await fetchProducts();
+  }
 
-  const accessories = featured
-    .filter((product) => String(product?.category || "").toLowerCase() === "accessory")
-    .slice(0, 4);
+  featured = featured.slice(0, 4);
 
   html = replaceGrid(
     html,
-    "featuredTshirtsGrid",
-    tshirts.map((product, index) => renderProductCard(product, index, 4)).join("\n")
+    "featuredProductsGrid",
+    featured
+      .map((product, index) =>
+        renderProductCard(product, index, 2)
+      )
+      .join("\n")
   );
 
-  html = replaceGrid(
+  html = hideLoadingMessage(
     html,
-    "featuredAccessoriesGrid",
-    accessories.map((product, index) => renderProductCard(product, index, 0)).join("\n")
+    "featuredProductsLoading"
   );
-
-  html = hideLoadingMessage(html, "featuredTshirtsLoading");
-  html = hideLoadingMessage(html, "featuredAccessoriesLoading");
 
   html = injectJsonLd(
     html,
-    itemListJsonLd([...tshirts, ...accessories], "Featured products"),
+    itemListJsonLd(
+      featured,
+      "Featured products"
+    ),
     "homepage-products"
   );
 
@@ -276,7 +277,7 @@ async function prerenderProductsPage() {
 
   html = injectJsonLd(
     html,
-    itemListJsonLd(products, "Skanare products"),
+    itemListJsonLd(products, "Store products"),
     "products-page"
   );
 
