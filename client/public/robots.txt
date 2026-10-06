@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://skanare.com/sitemap.xml
+# Set the production sitemap URL after configuring VITE_STORE_URL.
