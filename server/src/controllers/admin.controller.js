@@ -55,6 +55,20 @@ const PRODUCTS_COLLECTION =
 const USERS_COLLECTION =
   COLLECTIONS.USERS || "users";
 
+const STORE_NAME =
+  String(
+    process.env.STORE_NAME ||
+    "NovaStore"
+  ).trim() ||
+  "NovaStore";
+
+const DEFAULT_SHIPPING_PROVIDER =
+  String(
+    process.env.SHIPPING_PROVIDER ||
+    "Standard"
+  ).trim() ||
+  "Standard";
+
 /* =========================================================
    HELPERS
    ========================================================= */
@@ -1334,7 +1348,7 @@ export const updateOrderShipping = asyncHandler(
       carrier:
         cleanString(req.body?.carrier, 100) ||
         current.carrier ||
-        "BOX NOW",
+        DEFAULT_SHIPPING_PROVIDER,
 
       parcelId:
         cleanString(req.body?.parcelId, 200),
@@ -2548,7 +2562,7 @@ export const shipOrderAndNotify =
       ) {
         throw new ApiError(
           400,
-          "Save a BOX NOW parcel ID or tracking number before shipping"
+          "Save a parcel ID or tracking number before shipping"
         );
       }
 
@@ -2591,7 +2605,7 @@ export const shipOrderAndNotify =
           customerEmail,
 
         subject:
-          "Your Skanare order is on its way",
+          `Your ${STORE_NAME} order is on its way`,
 
         html: `
           <div style="
@@ -2605,7 +2619,7 @@ export const shipOrderAndNotify =
               letter-spacing:3px;
               font-weight:700;
             ">
-              SKANARE
+              ${STORE_NAME.toUpperCase()}
             </p>
 
             <h1>
@@ -2621,7 +2635,7 @@ export const shipOrderAndNotify =
             </p>
 
             <p>
-              Your Skanare order has been prepared and shipped.
+              Your ${STORE_NAME} order has been prepared and shipped.
             </p>
 
             <p>
@@ -2643,7 +2657,7 @@ export const shipOrderAndNotify =
               ${
                 shipping.carrier ||
                 order.delivery ||
-                "BOX NOW"
+                DEFAULT_SHIPPING_PROVIDER
               }
             </p>
 
@@ -2664,7 +2678,7 @@ export const shipOrderAndNotify =
             <p style="
               margin-top:40px;
             ">
-              Thank you for choosing Skanare.
+              Thank you for choosing ${STORE_NAME}.
             </p>
 
           </div>
@@ -2675,7 +2689,7 @@ export const shipOrderAndNotify =
             filename:
               order.receipt
                 .fileName ||
-              `Skanare-${order.id}-receipt.pdf`,
+              `${STORE_NAME}-${order.id}-receipt.pdf`,
 
             content:
               receiptBuffer,
@@ -2859,9 +2873,9 @@ export const replyToAdminContactMessage = asyncHandler(
       from:
         process.env.CONTACT_EMAIL_FROM ||
         process.env.EMAIL_FROM ||
-        "Skanare Contact <contact@skanare.com>",
+        `${STORE_NAME} Contact <contact@example.com>`,
       to,
-      subject: `Re: Skanare contact — ${cleanString(contact.name, 120) || "your message"}`,
+      subject: `Re: ${STORE_NAME} contact — ${cleanString(contact.name, 120) || "your message"}`,
       html: `
         <div style="font-family:Arial,sans-serif;color:#111;line-height:1.6">
           <p>${body
