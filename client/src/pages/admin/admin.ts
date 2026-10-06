@@ -211,7 +211,6 @@ function openView(view: string) {
     messages: "Messages",
     products: "Products",
     customers: "Customers",
-    qr: "QR Codes",
     payments: "Payments",
   };
 
@@ -277,7 +276,6 @@ async function loadDashboard() {
   setText("statRevenue", formatMoney(data.revenue || 0));
   setText("statOrders", String(data.orders || 0));
   setText("statCustomers", String(data.customers || 0));
-  setText("statQr", String(data.qrCodes || 0));
 
   renderOrders(data.recentOrders || [], "recentOrdersBody");
 }
