@@ -126,8 +126,6 @@ export const checkoutSchema = z.object({
 
   delivery: z.enum(["home"]).optional().default("home"),
 
-  locker: z.string().trim().max(160).optional().nullable(),
-
   documentType: z.enum(["receipt", "invoice"]).optional().default("receipt"),
 
   invoiceDetails: invoiceDetailsSchema.optional().nullable(),
