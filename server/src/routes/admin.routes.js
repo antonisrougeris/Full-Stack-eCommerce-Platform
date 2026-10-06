@@ -24,10 +24,7 @@ import {
   archiveAdminProduct,
   uploadAdminProductImages,
 
-  generateAdminQrStock,
-
   getAdminCustomers,
-  getAdminQrCodes,
   getAdminPayments,
   getAdminContactMessages,
   markAdminContactMessageRead,
@@ -256,32 +253,12 @@ router.post(
 
 
 /* =========================
-   QR INVENTORY
-   ========================= */
-
-router.post(
-  "/inventory/generate",
-  generateAdminQrStock
-);
-
-
-/* =========================
    CUSTOMERS
    ========================= */
 
 router.get(
   "/customers",
   getAdminCustomers
-);
-
-
-/* =========================
-   QR CODES
-   ========================= */
-
-router.get(
-  "/qr-codes",
-  getAdminQrCodes
 );
 
 

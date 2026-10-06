@@ -28,25 +28,8 @@ import {
 } from "../utils/ids.js";
 
 import {
-  reserveUniqueQrShortId,
-  writeQrShortIdReservation,
-} from "../services/qr-id.service.js";
-
-import {
   sendEmail,
 } from "../services/email.service.js";
-
-import {
-  uploadQrToStorage,
-} from "../utils/uploadQrToStorage.js";
-
-import {
-  generatePrintQrImage,
-} from "../utils/generatePrintQrImage.js";
-
-import {
-  generatePrintSheet,
-} from "../utils/generatePrintSheet.js";
 
 import {
   refreshStorefrontProductHtmlSafe,
@@ -334,9 +317,6 @@ export const seedProducts = asyncHandler(
             String(
               product.merchandisingTag || "none"
             ),
-
-          customQr:
-            product.customQr ?? false,
 
           images:
             Array.isArray(
@@ -1301,15 +1281,10 @@ export const updateOrderFulfillment = asyncHandler(
       "to_prepare",
       "preparing",
       "ready",
+      "shipped",
+      "completed",
       "cancelled",
     ];
-
-    if (status === "completed") {
-      throw new ApiError(
-        403,
-        "Completed is set automatically only after BOX NOW confirms delivery"
-      );
-    }
 
     if (!allowedStatuses.includes(status)) {
       throw new ApiError(400, "Invalid fulfillment status");
@@ -1342,8 +1317,8 @@ export const updateOrderFulfillment = asyncHandler(
     const nextAllowed = {
       to_prepare: ["preparing", "cancelled"],
       preparing: ["ready", "cancelled"],
-      ready: ["cancelled"],
-      shipped: [],
+      ready: ["shipped", "cancelled"],
+      shipped: ["completed"],
       completed: [],
       cancelled: [],
     };
