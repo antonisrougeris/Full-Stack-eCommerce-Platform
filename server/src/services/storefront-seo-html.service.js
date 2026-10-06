@@ -242,31 +242,18 @@ async function refreshLocale({
       locale,
     });
 
-  const featured =
-    products.filter(
-      (product) =>
-        Boolean(product?.featured)
-    );
+  let featured =
+    products
+      .filter(
+        (product) =>
+          Boolean(product?.featured)
+      )
+      .slice(0, 4);
 
-  const tshirts = featured
-    .filter(
-      (product) =>
-        String(
-          product?.category || ""
-        ).toLowerCase() ===
-        "tshirt"
-    )
-    .slice(0, 4);
-
-  const accessories = featured
-    .filter(
-      (product) =>
-        String(
-          product?.category || ""
-        ).toLowerCase() ===
-        "accessory"
-    )
-    .slice(0, 4);
+  if (!featured.length) {
+    featured =
+      products.slice(0, 4);
+  }
 
   let [
     homepageHtml,
@@ -278,28 +265,13 @@ async function refreshLocale({
 
   homepageHtml = replaceLiveBlock(
     homepageHtml,
-    "GRID:featuredTshirtsGrid",
-    tshirts
+    "GRID:featuredProductsGrid",
+    featured
       .map((product, index) =>
         renderProductCard(
           product,
           index,
-          4,
-          locale
-        )
-      )
-      .join("\n")
-  );
-
-  homepageHtml = replaceLiveBlock(
-    homepageHtml,
-    "GRID:featuredAccessoriesGrid",
-    accessories
-      .map((product, index) =>
-        renderProductCard(
-          product,
-          index,
-          0,
+          2,
           locale
         )
       )
@@ -311,10 +283,10 @@ async function refreshLocale({
     "JSONLD:homepage-products",
     `<script type="application/ld+json" data-prerender="homepage-products">
 ${itemListJsonLd(
-  [...tshirts, ...accessories],
+  featured,
   locale === "el"
-    ? "Προτεινόμενα προϊόντα NovaStore"
-    : "Featured NovaStore products",
+    ? "Προτεινόμενα προϊόντα"
+    : "Featured products",
   locale
 )}
 </script>`
@@ -342,8 +314,8 @@ ${itemListJsonLd(
 ${itemListJsonLd(
   products,
   locale === "el"
-    ? "Προϊόντα NovaStore"
-    : "NovaStore products",
+    ? "Προϊόντα καταστήματος"
+    : "Store products",
   locale
 )}
 </script>`
@@ -363,10 +335,8 @@ ${itemListJsonLd(
   return {
     products:
       products.length,
-    featuredTshirts:
-      tshirts.length,
-    featuredAccessories:
-      accessories.length,
+    featuredProducts:
+      featured.length,
   };
 }
 
@@ -413,10 +383,10 @@ async function refreshOnce(reason) {
   return {
     products:
       english.products,
-    featuredTshirts:
-      english.featuredTshirts,
-    featuredAccessories:
-      english.featuredAccessories,
+    featuredProducts:
+      english.featuredProducts,
+    featuredProducts:
+      english.featuredProducts,
     greekProducts:
       greek.products,
   };
