@@ -636,7 +636,7 @@ document.title = `${product.title} | ${STORE_NAME}`;
 const description =
   product.shortDescription ||
   product.description ||
-  "A quality product from ${STORE_NAME}.";
+  `A quality product from ${STORE_NAME}.`;
 
 
 const productIdentifier = product.slug || product.id;
