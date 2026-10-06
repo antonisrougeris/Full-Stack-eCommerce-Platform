@@ -41,7 +41,7 @@ export const cancelMyReturn = asyncHandler(async (req, res) => {
 });
 
 function sendPdf(res, { request, buffer }) {
-  const filename = `SKANARE-return-${String(
+  const filename = `return-${String(
     request.returnNumber || request.id
   ).replace(/[^a-zA-Z0-9._-]/g, "_")}.pdf`;
 
