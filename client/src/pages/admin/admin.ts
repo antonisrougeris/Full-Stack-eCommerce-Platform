@@ -21,8 +21,6 @@ const refreshButton = document.getElementById("adminRefresh");
 
 const productModal = document.getElementById("productModal");
 const productForm = document.getElementById("productForm") as HTMLFormElement | null;
-const stockModal = document.getElementById("stockModal");
-const stockForm = document.getElementById("stockForm") as HTMLFormElement | null;
 
 initPasswordVisibility();
 
@@ -35,7 +33,6 @@ let currentFulfillmentOrders: any[] = [];
 let currentReturns: any[] = [];
 let currentContactMessages: any[] = [];
 let currentProducts: any[] = [];
-let currentQrCodes: any[] = [];
 
 let existingProductImages: string[] = [];
 let pendingProductImageFiles: File[] = [];
@@ -258,9 +255,6 @@ async function loadView(view: string) {
       break;
     case "customers":
       await loadCustomers();
-      break;
-    case "qr":
-      await loadQr();
       break;
     case "payments":
       await loadPayments();
@@ -524,21 +518,12 @@ async function setFulfillmentStatus(orderId: string, status: string) {
    ORDER / FULFILLMENT DRAWER
    ========================================================= */
 
-async function ensureQrCodes(force = false) {
-  if (!force && currentQrCodes.length) return currentQrCodes;
-  const data = await adminApi("/qr-codes");
-  currentQrCodes = data.qrCodes || [];
-  return currentQrCodes;
-}
-
 async function openOrder(orderId: string) {
-  const [data, qrCodes] = await Promise.all([
-    adminApi(`/orders/${encodeURIComponent(orderId)}`),
-    ensureQrCodes(true).catch(() => []),
-  ]);
+  const data = await adminApi(
+    `/orders/${encodeURIComponent(orderId)}`
+  );
 
   const order = data.order;
-  const assignedQrs = (qrCodes || []).filter((qr: any) => qr.orderId === order.id);
   const status = String(order.fulfillmentStatus || (order.paymentStatus === "paid" ? "to_prepare" : "not_paid"));
   const checklist = order.warehouse?.checklist || {};
   const receipt = order.receipt || {};
@@ -577,8 +562,8 @@ async function openOrder(orderId: string) {
           ${status === "to_prepare" ? `<button class="admin-secondary-button" data-drawer-status="preparing">Start preparing</button>` : ""}
           ${status === "preparing" ? `<button class="admin-secondary-button" data-drawer-status="ready">Mark ready</button>` : ""}
           ${status === "ready" ? `<span class="admin-muted">Ready to ship. Use “Ship order & notify customer” below.</span>` : ""}
-          ${status === "shipped" ? `<span class="admin-muted">Shipped. Waiting for BOX NOW delivery confirmation.</span>` : ""}
-          ${status === "completed" ? `<span class="admin-muted">Completed automatically from BOX NOW delivery confirmation.</span>` : ""}
+          ${status === "shipped" ? `<span class="admin-muted">Shipped. Waiting for delivery completion.</span>` : ""}
+          ${status === "completed" ? `<span class="admin-muted">Completed.</span>` : ""}
         ` : `<span class="admin-muted">Fulfillment becomes available after payment.</span>`}
       </div>
     </div>
@@ -600,7 +585,7 @@ async function openOrder(orderId: string) {
     <div class="admin-detail-group">
       <h3>Delivery</h3>
       <p><strong>${escapeHtml(order.delivery || "—")}</strong></p>
-      <pre>${escapeHtml(JSON.stringify(order.locker || order.shippingAddress || {}, null, 2))}</pre>
+      <pre>${escapeHtml(JSON.stringify(order.shippingAddress || {}, null, 2))}</pre>
     </div>
 
     ${order.giftOptions?.tier && order.giftOptions.tier !== "none" ? `
@@ -626,23 +611,10 @@ async function openOrder(orderId: string) {
     </div>
 
     <div class="admin-detail-group">
-      <h3>Assigned QR codes</h3>
-      ${assignedQrs.length ? assignedQrs.map((qr: any) => `
-        <div class="drawer-qr">
-          <strong>${escapeHtml(qr.shortId || qr.id)}</strong><br />
-          ${escapeHtml(qr.productTitle || qr.productId || "")}
-          ${qr.targetUrl ? `<br /><span>${escapeHtml(qr.targetUrl)}</span>` : ""}
-        </div>
-      `).join("") : `<p class="admin-muted">No assigned QR returned by the admin QR endpoint yet. The payment service can still assign / generate QR stock during successful payment.</p>`}
-    </div>
-
-    <div class="admin-detail-group">
       <h3>Warehouse checklist</h3>
       <div class="warehouse-checklist">
         ${checklistInput("checkProductPicked", "Product picked", checklist.productPicked)}
         ${checklistInput("checkSizeVerified", "Size / variant verified", checklist.sizeVerified)}
-        ${checklistInput("checkQrAttached", "Correct QR attached", checklist.qrAttached)}
-        ${checklistInput("checkQrTested", "QR tested", checklist.qrTested)}
         ${checklistInput("checkPacked", "Packed", checklist.packed)}
       </div>
       <div class="admin-actions" style="margin-top:12px"><button id="saveChecklistButton" class="admin-secondary-button" type="button">Save checklist</button></div>
@@ -665,15 +637,13 @@ async function openOrder(orderId: string) {
     </div>
 
     <div class="admin-detail-group">
-      <h3>BOX NOW / shipping</h3>
+      <h3>Shipping</h3>
       <div class="admin-form-grid">
-        <label class="admin-field"><span>Carrier</span><input id="shippingCarrier" type="text" value="${escapeHtml(shipping.carrier || "BOX NOW")}" /></label>
+        <label class="admin-field"><span>Carrier</span><input id="shippingCarrier" type="text" value="${escapeHtml(shipping.carrier || "Standard")}" /></label>
         <label class="admin-field"><span>Parcel ID</span><input id="shippingParcelId" type="text" value="${escapeHtml(shipping.parcelId || "")}" /></label>
         <label class="admin-field"><span>Tracking number</span><input id="shippingTrackingNumber" type="text" value="${escapeHtml(shipping.trackingNumber || "")}" /></label>
-        <label class="admin-field"><span>Locker ID</span><input id="shippingLockerId" type="text" value="${escapeHtml(shipping.lockerId || order.locker?.id || "")}" /></label>
       </div>
       <label class="admin-field"><span>Tracking URL</span><input id="shippingTrackingUrl" type="url" value="${escapeHtml(shipping.trackingUrl || "")}" /></label>
-      <label class="admin-field"><span>Locker name</span><input id="shippingLockerName" type="text" value="${escapeHtml(shipping.lockerName || order.locker?.name || "")}" /></label>
       <div class="admin-actions"><button id="saveShippingButton" class="admin-secondary-button" type="button">Save shipping</button></div>
       <p id="shippingStatus" class="admin-inline-status"></p>
     </div>
@@ -687,7 +657,7 @@ async function openOrder(orderId: string) {
       <div class="warehouse-checklist" style="margin:12px 0">
         <label><input type="checkbox" disabled ${packedReady ? "checked" : ""} /> <span>Order packed</span></label>
         <label><input type="checkbox" disabled ${receiptReady ? "checked" : ""} /> <span>Receipt PDF uploaded</span></label>
-        <label><input type="checkbox" disabled ${shippingReady ? "checked" : ""} /> <span>BOX NOW parcel / tracking saved</span></label>
+        <label><input type="checkbox" disabled ${shippingReady ? "checked" : ""} /> <span>Parcel / tracking saved</span></label>
       </div>
 
       ${
@@ -840,8 +810,6 @@ function bindOrderDrawerActions(order: any) {
           parcelId: inputValue("shippingParcelId"),
           trackingNumber: inputValue("shippingTrackingNumber"),
           trackingUrl: inputValue("shippingTrackingUrl"),
-          lockerId: inputValue("shippingLockerId"),
-          lockerName: inputValue("shippingLockerName"),
         }),
       });
 
@@ -935,7 +903,6 @@ function renderReturns() {
       const canReview = ["requested", "provider_failed"].includes(status);
       const canReceive = ["approved", "label_ready", "dropped_off", "in_transit", "provider_issue"].includes(status);
       const canRefund = status === "refund_pending";
-      const canLabel = Boolean(request.boxnow?.parcelId) && !["rejected", "cancelled"].includes(status);
 
       const items = Array.isArray(request.items)
         ? request.items
@@ -982,22 +949,15 @@ function renderReturns() {
             ? `<p class="admin-muted"><strong>Customer note:</strong> ${escapeHtml(request.customerNote)}</p>`
             : ""}
 
-          ${request.providerError?.message
-            ? `<p class="admin-status" style="color:#9b1c1c;">BOX NOW: ${escapeHtml(request.providerError.message)}</p>`
-            : ""}
-
           <div class="fulfillment-card__footer">
             <div>
               <strong>${formatMoney(Number(request.refundEstimate || 0))}</strong>
               <div class="admin-muted">Estimated item refund</div>
             </div>
             <div class="admin-actions">
-              ${canLabel
-                ? `<button class="admin-secondary-button" data-return-label="${escapeHtml(request.id)}">Voucher PDF</button>`
-                : ""}
               ${canReview
                 ? `<button class="admin-secondary-button" data-return-reject="${escapeHtml(request.id)}">Reject</button>
-                   <button class="admin-primary-button" data-return-approve="${escapeHtml(request.id)}">Approve + BOX NOW</button>`
+                   <button class="admin-primary-button" data-return-approve="${escapeHtml(request.id)}">Approve return</button>`
                 : ""}
               ${canReceive
                 ? `<button class="admin-secondary-button" data-return-received="${escapeHtml(request.id)}">Mark received</button>`
@@ -1102,42 +1062,8 @@ document.addEventListener("click", (event) => {
     });
     return;
   }
-
-  const label = target.closest<HTMLElement>("[data-return-label]");
-  if (label?.dataset.returnLabel) {
-    void downloadAdminReturnLabel(label.dataset.returnLabel);
-  }
 });
 
-async function downloadAdminReturnLabel(returnId: string) {
-  const user = firebaseAuth.currentUser;
-  if (!user) throw new Error("Administrator not signed in");
-
-  const token = await user.getIdToken();
-  const response = await fetch(
-    `/api/admin/returns/${encodeURIComponent(returnId)}/label`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
-  if (!response.ok) {
-    const payload = await response.json().catch(() => null);
-    throw new Error(payload?.message || "Return voucher is not available.");
-  }
-
-  const blob = await response.blob();
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `SKANARE-return-${returnId}.pdf`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-}
 
 /* =========================================================
    CONTACT MESSAGES
@@ -1286,13 +1212,10 @@ document.getElementById("adminMessagesList")?.addEventListener("click", async (e
    ========================================================= */
 
 async function loadProducts() {
-  const [productData, qrData] = await Promise.all([
-    adminApi("/products"),
-    adminApi("/qr-codes").catch(() => ({ qrCodes: [] })),
-  ]);
-
-  currentProducts = productData.products || [];
-  currentQrCodes = qrData.qrCodes || [];
+  const productData =
+    await adminApi("/products");
+  currentProducts =
+    productData.products || [];
   renderProducts();
 }
 
@@ -1335,17 +1258,6 @@ function renderProducts() {
         0
       );
 
-      const readyQrCodes = currentQrCodes.filter(
-        (qr: any) => qr.productId === product.id && qr.status === "available"
-      );
-
-      const readyBySku = new Map<string, number>();
-      readyQrCodes.forEach((qr: any) => {
-        const sku = String(qr.sku || qr.variant?.sku || "");
-        if (!sku) return;
-        readyBySku.set(sku, (readyBySku.get(sku) || 0) + 1);
-      });
-
       return `
         <article class="admin-product ${active ? "" : "is-inactive"}">
           ${(product.colorOptions?.find((c: any) => c.name === product.defaultColor)?.images?.[0] || product.colorOptions?.[0]?.images?.[0] || product.image || product.images?.[0])
@@ -1375,27 +1287,20 @@ function renderProducts() {
               ${variants.length ? `
                 <div class="admin-product__variant-list">
                   ${variants.map((variant: any) => {
-                    const ready = readyBySku.get(String(variant.sku || "")) || 0;
                     const label = [variant.size || "One size", variant.color || ""].filter(Boolean).join(" · ");
 
                     return `
                       <div class="admin-product__variant">
                         <span>${escapeHtml(label)}</span>
-                        <span>made-to-order ${Number(variant.stock || 0)} · ready QR ${ready}</span>
+                        <span>stock ${Number(variant.stock || 0)}</span>
                       </div>
                     `;
                   }).join("")}
                 </div>
               ` : `<div class="admin-muted" style="margin-top:8px">No sellable size / option configured.</div>`}
-
-              <div class="admin-product__stock-row" style="margin-top:12px;padding-top:10px;border-top:1px solid #eeeeea">
-                <span>Ready QR stock</span>
-                <strong>${readyQrCodes.length}</strong>
-              </div>
             </div>
 
             <div class="admin-product__actions">
-              <button class="admin-primary-button" type="button" data-add-qr-stock="${escapeHtml(product.id)}" ${active ? "" : "disabled"}>Add QR stock</button>
               <button class="admin-secondary-button" type="button" data-edit-product="${escapeHtml(product.id)}">Edit</button>
               ${
                 active
@@ -2122,12 +2027,6 @@ document.getElementById("adminProductsGrid")?.addEventListener("click", async (e
     return;
   }
 
-  const addQr = target.closest<HTMLElement>("[data-add-qr-stock]");
-  if (addQr?.dataset.addQrStock) {
-    openStockModal(addQr.dataset.addQrStock);
-    return;
-  }
-
   const archive = target.closest<HTMLButtonElement>("[data-archive-product]");
   if (archive?.dataset.archiveProduct) {
     const productId = archive.dataset.archiveProduct;
@@ -2149,139 +2048,7 @@ document.getElementById("adminProductsGrid")?.addEventListener("click", async (e
 });
 
 /* =========================================================
-   QR STOCK GENERATION
-   ========================================================= */
-
-document.getElementById("openAddStockButton")?.addEventListener("click", async () => {
-  if (!currentProducts.length) await loadProducts();
-  openStockModal();
-});
-
-document.querySelectorAll<HTMLElement>("[data-close-stock-modal]").forEach((element) => {
-  element.addEventListener("click", closeStockModal);
-});
-
-document.getElementById("stockProductId")?.addEventListener("change", () => {
-  populateStockVariants();
-});
-
-document.getElementById("stockColorSelect")?.addEventListener("change", () => populateStockSizes());
-document.getElementById("stockSizeSelect")?.addEventListener("change", () => applySelectedStockVariant());
-
-function openStockModal(preselectedProductId = "") {
-  populateStockProducts(preselectedProductId);
-  populateStockVariants();
-  setInputValue("stockQuantity", 1);
-  setInlineStatus(document.getElementById("stockFormStatus"), "");
-
-  stockModal?.classList.remove("hidden");
-  stockModal?.setAttribute("aria-hidden", "false");
-}
-
-function closeStockModal() {
-  stockModal?.classList.add("hidden");
-  stockModal?.setAttribute("aria-hidden", "true");
-}
-
-function populateStockProducts(preselectedProductId = "") {
-  const select = document.getElementById("stockProductId") as HTMLSelectElement | null;
-  if (!select) return;
-
-  select.innerHTML = currentProducts
-    .filter((product) => product.active !== false)
-    .map((product) => `<option value="${escapeHtml(product.id)}">${escapeHtml(product.title || product.id)}</option>`)
-    .join("");
-
-  if (preselectedProductId) {
-    select.value = preselectedProductId;
-  }
-}
-
-function populateStockVariants() {
-  const product = currentProducts.find(item => item.id === inputValue("stockProductId"));
-  const variants = Array.isArray(product?.variants) ? product.variants : [];
-  const colorSelect = document.getElementById("stockColorSelect") as HTMLSelectElement | null;
-  const oldSelect = document.getElementById("stockVariantSelect") as HTMLSelectElement | null;
-  if (oldSelect) oldSelect.innerHTML = variants.map((_: any,i: number) => `<option value="${i}">${i}</option>`).join("");
-  if (!colorSelect) return;
-  const colors = Array.from(new Set(variants.map((v: any) => String(v.color || "")))) as string[];
-  colorSelect.innerHTML = colors.map(color => `<option value="${escapeHtml(color)}">${escapeHtml(color || "Default")}</option>`).join("");
-  populateStockSizes();
-}
-function populateStockSizes() {
-  const product = currentProducts.find(item => item.id === inputValue("stockProductId"));
-  const variants = Array.isArray(product?.variants) ? product.variants : [];
-  const sizeSelect = document.getElementById("stockSizeSelect") as HTMLSelectElement | null;
-  if (!sizeSelect) return;
-  const color = inputValue("stockColorSelect");
-  const options = variants.filter((v: any) => String(v.color || "") === color);
-  sizeSelect.innerHTML = options.map((v: any) => `<option value="${escapeHtml(v.size || "")}">${escapeHtml(v.size || "One size")}</option>`).join("");
-  applySelectedStockVariant();
-}
-function applySelectedStockVariant() {
-  const product = currentProducts.find(item => item.id === inputValue("stockProductId"));
-  const variants = Array.isArray(product?.variants) ? product.variants : [];
-  const index = variants.findIndex((v: any) => String(v.color || "") === inputValue("stockColorSelect")
-    && String(v.size || "") === inputValue("stockSizeSelect"));
-  const variant = variants[index];
-  setInputValue("stockVariantSelect", index >= 0 ? index : "");
-  setInputValue("stockSku", variant?.sku || "");
-  setInputValue("stockSize", variant?.size || "");
-  setInputValue("stockColor", variant?.color || "");
-  const submit = document.getElementById("generateStockButton") as HTMLButtonElement | null;
-  if (submit) submit.disabled = !variant?.sku;
-}
-
-stockForm?.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const statusEl = document.getElementById("stockFormStatus");
-  const productId = inputValue("stockProductId");
-  const sku = inputValue("stockSku");
-  const size = inputValue("stockSize");
-  const color = inputValue("stockColor");
-  const quantity = Number(inputValue("stockQuantity"));
-
-  if (!productId || !sku) {
-    setInlineStatus(statusEl, "Product and sellable size / option are required.", "error");
-    return;
-  }
-
-  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 100) {
-    setInlineStatus(statusEl, "Quantity must be between 1 and 100.", "error");
-    return;
-  }
-
-  setInlineStatus(
-    statusEl,
-    `Generating ${quantity} QR stock item${quantity === 1 ? "" : "s"}. This can take a little while because print files are generated and uploaded...`
-  );
-
-  const submitButton = document.getElementById("generateStockButton") as HTMLButtonElement | null;
-  if (submitButton) submitButton.disabled = true;
-
-  try {
-    const result = await adminApi("/inventory/generate", {
-      method: "POST",
-      body: JSON.stringify({ productId, quantity, sku, size, color }),
-    });
-
-    setInlineStatus(
-      statusEl,
-      `Created ${Number(result?.count ?? result?.created?.length ?? quantity)} QR stock item(s).`,
-      "success"
-    );
-
-    await Promise.all([loadProducts(), loadQr().catch(() => undefined)]);
-  } catch (error) {
-    setInlineStatus(statusEl, errorMessage(error), "error");
-  } finally {
-    if (submitButton) submitButton.disabled = false;
-  }
-});
-
-/* =========================================================
-   CUSTOMERS / QR / PAYMENTS
+   CUSTOMERS / PAYMENTS
    ========================================================= */
 
 async function loadCustomers() {
@@ -2290,21 +2057,6 @@ async function loadCustomers() {
     "customersList",
     data.customers || [],
     (customer: any) => `${customer.email || customer.id}`
-  );
-}
-
-async function loadQr() {
-  const data = await adminApi("/qr-codes");
-  currentQrCodes = data.qrCodes || [];
-
-  renderSimpleList(
-    "qrAdminList",
-    currentQrCodes,
-    (qr: any) => {
-      const status = qr.status ? ` [${qr.status}]` : "";
-      const sku = qr.sku ? ` · ${qr.sku}` : "";
-      return `${qr.shortId || qr.id}${status}${sku} → ${qr.targetUrl || "No destination"}`;
-    }
   );
 }
 
