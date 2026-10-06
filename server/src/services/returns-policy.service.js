@@ -131,7 +131,7 @@ export function getOrderReturnEligibility(
   };
 }
 
-export function mapBoxNowReturnEvent(event) {
+export function mapReturnShippingEvent(event) {
   const value = String(event || "").trim().toLowerCase();
 
   if (value === "accepted-for-return") return "dropped_off";
