@@ -351,7 +351,7 @@ async function renderFullProductPage(
 
     <meta
       property="og:site_name"
-      content="Skanare"
+      content="${escapeHtml(storeName())}"
     />
 
     <meta
