@@ -3,7 +3,7 @@ import { COLLECTIONS } from '../constants/collections.js';
 import { ApiError } from '../utils/apiError.js';
 import { normalizeText } from '../utils/product.js';
 import { chooseProductImages } from './product-colors.service.js';
-import { availabilityForProduct, inventoryKey, isReadyQr } from './stock-availability.service.js';
+import { availabilityForProduct } from './stock-availability.service.js';
 import {
   getInventoryKey,
   readActiveReservationCounts,
@@ -57,21 +57,6 @@ export function assertStockForVariant(product, variant, quantity) {
   if (!Number.isSafeInteger(available) || available < qty) {
     throw new ApiError(400, 'Not enough stock for selected variant');
   }
-}
-
-// IMPORTANT: This reads available QR records to derive a storefront quantity, not to
-// reserve them. Checkout performs the authoritative query inside its transaction.
-async function readReadyCounts(db) {
-  const snap = await db.collection(COLLECTIONS.QR_CODES)
-    .where('status', '==', 'available').get();
-  const counts = new Map();
-  for (const doc of snap.docs) {
-    const qr = doc.data();
-    if (!isReadyQr(qr)) continue;
-    const key = qr.inventoryKey || inventoryKey(qr.productId, qr.sku);
-    counts.set(key, (counts.get(key) || 0) + 1);
-  }
-  return counts;
 }
 
 function applyActiveReservations(product, reservedCounts) {
@@ -147,24 +132,13 @@ export async function listProductsService({category, q, featured, limit, locale 
   products.sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
   const n = Number(limit);
   if (Number.isSafeInteger(n) && n > 0) products = products.slice(0, n);
-  if (!products.some(p => p.customQr && p.variants?.length)) {
-    return products.map((product) =>
-      localizeProduct(
-        withDefaultGallery(product),
-        locale
-      )
-    );
-  }
-  const [ready, reserved] = await Promise.all([
-    readReadyCounts(db),
-    readActiveReservationCounts(db),
-  ]);
+  const reserved = await readActiveReservationCounts(db);
 
   return products.map((product) =>
     localizeProduct(
       withDefaultGallery(
         applyActiveReservations(
-          availabilityForProduct(product, ready),
+          availabilityForProduct(product),
           reserved
         )
       ),
@@ -186,21 +160,12 @@ export async function getProductByIdOrSlug(idOrSlug, { locale = "en" } = {}) {
     product = { id: query.docs[0].id, ...query.docs[0].data() };
   }
   if (product.active === false) throw new ApiError(404, 'Product not found');
-  if (!product.customQr || !product.variants?.length) {
-    return localizeProduct(
-      withDefaultGallery(product),
-      locale
-    );
-  }
-  const [ready, reserved] = await Promise.all([
-    readReadyCounts(db),
-    readActiveReservationCounts(db),
-  ]);
+  const reserved = await readActiveReservationCounts(db);
 
   return localizeProduct(
     withDefaultGallery(
       applyActiveReservations(
-        availabilityForProduct(product, ready),
+        availabilityForProduct(product),
         reserved
       )
     ),
