@@ -1,0 +1,508 @@
+[
+  {
+    "id": "scan-me-black",
+    "slug": "scan-me-t-shirt-black",
+    "title": "Scan Me T-Shirt - Black",
+    "shortDescription": "Black unisex custom QR t-shirt with white QR print.",
+    "description": "100% organic cotton black t-shirt with custom editable white QR print. High-quality durable print, 180 g/m² fabric density and medium fit for everyday wear.",
+    "category": "tshirt",
+    "price": 29.9,
+    "currency": "EUR",
+    "stock": 20,
+    "featured": true,
+    "active": true,
+    "customQr": true,
+    "qrConfig": {
+      "textPrint": "SCAN ME",
+      "textPosition": "bottom",
+      "qrColor": "#ffffff",
+      "textColor": "#ffffff",
+      "size": 3540
+    },
+    "images": [
+      "/assets/img/products/scan-me-black/scan-me-black-back.png",
+      "/assets/img/products/scan-me-black/scan-me-black-front.png",
+      "/assets/img/products/scan-me-black/scan-me-black-neck.png"
+    ],
+    "variants": [
+      {
+        "sku": "CLASSIC-BLACK-S",
+        "size": "S",
+        "color": "Black",
+        "stock": 4
+      },
+      {
+        "sku": "CLASSIC-BLACK-M",
+        "size": "M",
+        "color": "Black",
+        "stock": 5
+      },
+      {
+        "sku": "CLASSIC-BLACK-L",
+        "size": "L",
+        "color": "Black",
+        "stock": 5
+      },
+      {
+        "sku": "CLASSIC-BLACK-XL",
+        "size": "XL",
+        "color": "Black",
+        "stock": 3
+      },
+      {
+        "sku": "CLASSIC-BLACK-2XL",
+        "size": "2XL",
+        "color": "Black",
+        "stock": 3
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Maria",
+        "rating": 5,
+        "comment": "Great quality and the QR code scans perfectly."
+      },
+      {
+        "name": "Alex",
+        "rating": 5,
+        "comment": "Nice fit and fast delivery."
+      },
+      {
+        "name": "Nikos",
+        "rating": 4,
+        "comment": "Very good print quality."
+      }
+    ],
+    "translations": {
+      "el": {
+        "title": "Scan Me T-Shirt - Μαύρο",
+        "shortDescription": "Μαύρο unisex t-shirt με εξατομικευμένο, επεξεργάσιμο QR σε λευκή εκτύπωση.",
+        "description": "Μαύρο t-shirt από 100% οργανικό βαμβάκι με εξατομικευμένο δυναμικό QR σε λευκή εκτύπωση. Ανθεκτική εκτύπωση υψηλής ποιότητας, ύφασμα 180 g/m² και άνετη μεσαία γραμμή για καθημερινή χρήση."
+      }
+    }
+  },
+  {
+    "id": "discover-me-white",
+    "slug": "discover-me-t-shirt-white",
+    "title": "Discover Me T-Shirt - White",
+    "shortDescription": "White unisex custom QR t-shirt with black QR print.",
+    "description": "Premium white t-shirt with custom editable black QR print. Soft organic cotton feel with a clean minimal look and comfortable regular fit.",
+    "category": "tshirt",
+    "price": 29.9,
+    "currency": "EUR",
+    "stock": 20,
+    "featured": true,
+    "active": true,
+    "customQr": true,
+    "qrConfig": {
+      "textPrint": "SCAN TO DISCOVER",
+      "textPosition": "bottom",
+      "qrColor": "#000000",
+      "textColor": "#000000",
+      "size": 3540
+    },
+    "images": [
+      "/assets/img/products/white-scan-to-discover.png"
+    ],
+    "variants": [
+      {
+        "sku": "CLASSIC-WHITE-S",
+        "size": "S",
+        "color": "White",
+        "stock": 4
+      },
+      {
+        "sku": "CLASSIC-WHITE-M",
+        "size": "M",
+        "color": "White",
+        "stock": 5
+      },
+      {
+        "sku": "CLASSIC-WHITE-L",
+        "size": "L",
+        "color": "White",
+        "stock": 5
+      },
+      {
+        "sku": "CLASSIC-WHITE-XL",
+        "size": "XL",
+        "color": "White",
+        "stock": 3
+      },
+      {
+        "sku": "CLASSIC-WHITE-2XL",
+        "size": "2XL",
+        "color": "White",
+        "stock": 3
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Eleni",
+        "rating": 5,
+        "comment": "Clean design and comfortable fabric."
+      },
+      {
+        "name": "George",
+        "rating": 4,
+        "comment": "The QR print looks sharp."
+      }
+    ],
+    "translations": {
+      "el": {
+        "title": "Discover Me T-Shirt - Λευκό",
+        "shortDescription": "Λευκό unisex t-shirt με εξατομικευμένο, επεξεργάσιμο QR σε μαύρη εκτύπωση.",
+        "description": "Premium λευκό t-shirt με εξατομικευμένο δυναμικό QR σε μαύρη εκτύπωση. Απαλή αίσθηση οργανικού βαμβακιού, minimal εμφάνιση και άνετη κανονική γραμμή."
+      }
+    }
+  },
+  {
+    "id": "ride-with-me-black",
+    "slug": "ride-with-me-t-shirt-black",
+    "title": "Ride With Me T-Shirt - Black",
+    "shortDescription": "Black unisex custom QR t-shirt with custom white QR print.",
+    "description": "100% organic cotton black t-shirt with editable QR print. High-quality durable print, 180 g/m² fabric density and comfortable medium fit for everyday wear.",
+    "category": "tshirt",
+    "price": 29.9,
+    "currency": "EUR",
+    "stock": 20,
+    "featured": true,
+    "active": true,
+    "customQr": true,
+    "qrConfig": {
+      "textPrint": "WANNA RIDE WITH ME?",
+      "textPosition": "bottom",
+      "qrColor": "#ffffff",
+      "textColor": "#ffffff",
+      "size": 3540
+    },
+    "images": [
+      "/assets/img/products/black-wanna-ride.png"
+    ],
+    "variants": [
+      {
+        "sku": "CLASSIC-BLACK-RIDE-S",
+        "size": "S",
+        "color": "Black",
+        "stock": 4
+      },
+      {
+        "sku": "CLASSIC-BLACK-RIDE-M",
+        "size": "M",
+        "color": "Black",
+        "stock": 5
+      },
+      {
+        "sku": "CLASSIC-BLACK-RIDE-L",
+        "size": "L",
+        "color": "Black",
+        "stock": 5
+      },
+      {
+        "sku": "CLASSIC-BLACK-RIDE-XL",
+        "size": "XL",
+        "color": "Black",
+        "stock": 3
+      },
+      {
+        "sku": "CLASSIC-BLACK-RIDE-2XL",
+        "size": "2XL",
+        "color": "Black",
+        "stock": 3
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Kostas",
+        "rating": 5,
+        "comment": "Great quality and unique QR design."
+      },
+      {
+        "name": "Anna",
+        "rating": 5,
+        "comment": "The print looks premium."
+      }
+    ],
+    "translations": {
+      "el": {
+        "title": "Ride With Me T-Shirt - Μαύρο",
+        "shortDescription": "Μαύρο unisex t-shirt με εξατομικευμένο QR σε λευκή εκτύπωση.",
+        "description": "Μαύρο t-shirt από 100% οργανικό βαμβάκι με επεξεργάσιμο QR. Ανθεκτική εκτύπωση υψηλής ποιότητας, ύφασμα 180 g/m² και άνετη μεσαία γραμμή για καθημερινή χρήση."
+      }
+    }
+  },
+  {
+    "id": "scan-for-a-date-nightfall",
+    "slug": "scan-for-a-date-t-shirt-nightfall",
+    "title": "Scan For A Date T-Shirt - Nightfall",
+    "shortDescription": "White unisex t-shirt with blue QR print.",
+    "description": "Premium white t-shirt with custom blue QR print. A clean minimal design with a unique QR code style, comfortable fit and high-quality durable print.",
+    "category": "tshirt",
+    "price": 29.9,
+    "currency": "EUR",
+    "stock": 12,
+    "featured": true,
+    "active": true,
+    "customQr": true,
+    "qrConfig": {
+      "textPrint": "SCAN FOR A DATE",
+      "textPosition": "bottom",
+      "qrColor": [
+        "#ff6a00",
+        "#ee0979"
+      ],
+      "textColor": "#000000",
+      "size": 3540
+    },
+    "images": [
+      "/assets/img/products/nightfall.png"
+    ],
+    "variants": [
+      {
+        "sku": "NIGHTFALL-S",
+        "size": "S",
+        "color": "White",
+        "stock": 2
+      },
+      {
+        "sku": "NIGHTFALL-M",
+        "size": "M",
+        "color": "White",
+        "stock": 3
+      },
+      {
+        "sku": "NIGHTFALL-L",
+        "size": "L",
+        "color": "White",
+        "stock": 3
+      },
+      {
+        "sku": "NIGHTFALL-XL",
+        "size": "XL",
+        "color": "White",
+        "stock": 2
+      },
+      {
+        "sku": "NIGHTFALL-2XL",
+        "size": "2XL",
+        "color": "White",
+        "stock": 2
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Sofia",
+        "rating": 5,
+        "comment": "The blue QR design looks amazing."
+      },
+      {
+        "name": "Dimitris",
+        "rating": 4,
+        "comment": "Unique style and great quality."
+      }
+    ],
+    "translations": {
+      "el": {
+        "title": "Scan For A Date T-Shirt - Nightfall",
+        "shortDescription": "Λευκό unisex t-shirt με ιδιαίτερη έγχρωμη εκτύπωση QR.",
+        "description": "Premium λευκό t-shirt με εξατομικευμένο έγχρωμο QR. Καθαρό minimal design, άνετη εφαρμογή και ανθεκτική εκτύπωση υψηλής ποιότητας."
+      }
+    }
+  },
+  {
+    "id": "qr-card",
+    "slug": "qr-card",
+    "title": "QR Card",
+    "shortDescription": "Wallet-friendly QR card with editable destination link.",
+    "description": "Minimal QR card designed to fit in your wallet and share your profile, website, contact page or any other destination instantly.",
+    "category": "accessory",
+    "price": 14.9,
+    "currency": "EUR",
+    "stock": 50,
+    "featured": true,
+    "active": true,
+    "customQr": true,
+    "qrConfig": {
+      "textPrint": "SCAN ME",
+      "textPosition": "bottom",
+      "color": "#ffffff",
+      "size": 3540
+    },
+    "images": [
+      "/assets/img/products/qr-card.png"
+    ],
+    "variants": [
+      {
+        "sku": "QR-CARD-BLACK",
+        "color": "Black",
+        "stock": 25
+      },
+      {
+        "sku": "QR-CARD-WHITE",
+        "color": "White",
+        "stock": 25
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Petros",
+        "rating": 5,
+        "comment": "Very useful and easy to carry."
+      }
+    ],
+    "translations": {
+      "el": {
+        "title": "Κάρτα QR",
+        "shortDescription": "Κομψή κάρτα QR για το πορτοφόλι σου, με προορισμό που αλλάζει όποτε θέλεις.",
+        "description": "Minimal κάρτα QR σχεδιασμένη για το πορτοφόλι σου. Μοιράσου άμεσα το profile, το website, τα στοιχεία επικοινωνίας ή οποιονδήποτε άλλο υποστηριζόμενο προορισμό και άλλαξέ τον αργότερα χωρίς να αλλάξεις την κάρτα."
+      }
+    }
+  },
+  {
+    "id": "qr-keychain",
+    "slug": "qr-keychain",
+    "title": "QR Keychain",
+    "shortDescription": "Compact keychain with personal editable QR code.",
+    "description": "Small, durable and practical QR keychain that links directly to your chosen destination and is easy to scan on the go.",
+    "category": "accessory",
+    "price": 12.9,
+    "currency": "EUR",
+    "stock": 40,
+    "featured": true,
+    "active": true,
+    "customQr": true,
+    "qrConfig": {
+      "textPrint": "SCAN ME",
+      "textPosition": "bottom",
+      "color": "#ffffff",
+      "size": 3540
+    },
+    "images": [
+      "/assets/img/products/qr-keychain.png"
+    ],
+    "variants": [
+      {
+        "sku": "QR-KEYCHAIN-BLACK",
+        "color": "Black",
+        "stock": 20
+      },
+      {
+        "sku": "QR-KEYCHAIN-WHITE",
+        "color": "White",
+        "stock": 20
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Ioanna",
+        "rating": 5,
+        "comment": "Small, practical and scans fast."
+      }
+    ],
+    "translations": {
+      "el": {
+        "title": "Μπρελόκ QR",
+        "shortDescription": "Μικρό και πρακτικό μπρελόκ με προσωπικό QR που μπορείς να ενημερώνεις.",
+        "description": "Ανθεκτικό και πρακτικό μπρελόκ QR που οδηγεί στον προορισμό που επιλέγεις. Είναι εύκολο στο σκανάρισμα και μπορείς να αλλάζεις τον σύνδεσμό του αργότερα από τον λογαριασμό σου."
+      }
+    }
+  },
+  {
+    "id": "qr-tote-bag",
+    "slug": "qr-tote-bag",
+    "title": "QR Tote Bag",
+    "shortDescription": "Minimal tote bag with custom editable QR print.",
+    "description": "Everyday tote bag with QR print that can point to your social links, website, event page or any destination you want to update later.",
+    "category": "accessory",
+    "price": 19.9,
+    "currency": "EUR",
+    "stock": 25,
+    "featured": true,
+    "active": true,
+    "customQr": true,
+    "qrConfig": {
+      "textPrint": "SCAN ME",
+      "textPosition": "bottom",
+      "color": "#ffffff",
+      "size": 3540
+    },
+    "images": [
+      "/assets/img/products/qr-tote-bag.png"
+    ],
+    "variants": [
+      {
+        "sku": "QR-TOTE-NATURAL",
+        "color": "Natural",
+        "stock": 15
+      },
+      {
+        "sku": "QR-TOTE-BLACK",
+        "color": "Black",
+        "stock": 10
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Christina",
+        "rating": 5,
+        "comment": "Great for events and daily use."
+      }
+    ],
+    "translations": {
+      "el": {
+        "title": "Tote Bag QR",
+        "shortDescription": "Minimal tote bag με εξατομικευμένη εκτύπωση δυναμικού QR.",
+        "description": "Tote bag για καθημερινή χρήση με QR που μπορεί να οδηγεί στα social σου, στο website, σε event page ή σε άλλο προορισμό. Άλλαξε τον σύνδεσμο αργότερα χωρίς να αντικαταστήσεις την τσάντα."
+      }
+    }
+  },
+  {
+    "id": "qr-stickers",
+    "slug": "qr-stickers",
+    "title": "QR Stickers",
+    "shortDescription": "Sticker pack with editable personal QR code.",
+    "description": "Pack of QR stickers for packaging, events, laptops, notebooks or marketing use. Each sticker links to your chosen editable destination.",
+    "category": "accessory",
+    "price": 9.9,
+    "currency": "EUR",
+    "stock": 100,
+    "featured": true,
+    "active": true,
+    "customQr": true,
+    "qrConfig": {
+      "textPrint": "SCAN ME",
+      "textPosition": "bottom",
+      "color": "#ffffff",
+      "size": 3540
+    },
+    "images": [
+      "/assets/img/products/qr-stickers.png"
+    ],
+    "variants": [
+      {
+        "sku": "QR-STICKERS-WHITE",
+        "color": "White",
+        "stock": 100
+      }
+    ],
+    "reviews": [
+      {
+        "name": "Manos",
+        "rating": 5,
+        "comment": "Perfect sticker pack and easy to scan."
+      },
+      {
+        "name": "Eva",
+        "rating": 5,
+        "comment": "Good quality stickers."
+      }
+    ],
+    "translations": {
+      "el": {
+        "title": "Αυτοκόλλητα QR",
+        "shortDescription": "Σετ αυτοκόλλητων με προσωπικό QR και προορισμό που μπορείς να αλλάζεις.",
+        "description": "Σετ αυτοκόλλητων QR για συσκευασίες, events, laptop, σημειωματάρια ή marketing. Το QR οδηγεί στον προορισμό που επιλέγεις και μπορείς να τον ενημερώνεις αργότερα."
+      }
+    }
+  }
+]
