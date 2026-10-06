@@ -1,0 +1,62 @@
+name: Commerce CI
+
+on:
+  push:
+    branches:
+      - main
+      - productize
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - run: npm ci
+      - name: Build storefront
+        env:
+          VITE_API_BASE_URL: http://127.0.0.1:59999/api
+          VITE_STORE_NAME: NovaStore
+          VITE_STORE_URL: http://localhost:5173
+        run: npm run build
+
+  backend:
+    name: Backend Validation
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci
+      - name: Syntax check
+        run: |
+          find src scripts -type f -name '*.js' -print0 | xargs -0 -n1 node --check
+      - name: Ensure removed vertical integrations are not imported
+        run: |
+          if grep -R -n -E 'qr-id\.service|qr\.service|qr\.routes|boxnow\.service|boxnow\.routes|generatePrintQr|uploadQrToStorage' src; then
+            echo "Removed QR/locker integration is still imported"
+            exit 1
+          fi
+      - name: Tests
+        run: npm test
