@@ -1,0 +1,389 @@
+.cart-stock-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 6px;
+  color: #268a4b !important;
+  font-size: 0.76rem !important;
+  font-weight: 800;
+}
+
+.cart-stock-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: #2fb465;
+  box-shadow: 0 0 0 3px rgba(47, 180, 101, 0.12);
+}
+
+.cart-gift-row {
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: 26px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+}
+
+.cart-gift-icon {
+  display: grid;
+  place-items: center;
+  color: #222;
+}
+
+.cart-gift-text {
+  min-width: 0;
+}
+
+.cart-gift-arrow {
+  font-size: 1.1rem;
+  line-height: 1;
+  color: #555;
+}
+
+.checkout-container {
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding-bottom: 16px;
+}
+
+.cart-return-note {
+  color: #3a3a3a;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cart-return-note:hover {
+  color: #000;
+}
+
+@media (max-width: 520px) {
+  .cart-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .cart-gift-row {
+    font-size: 0.72rem;
+  }
+}
+
+
+.cart-gift-row {
+  width: 100%;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cart-gift-row:hover {
+  background: #fafafa;
+}
+
+.cart-gift-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.cart-gift-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.48);
+  backdrop-filter: blur(2px);
+}
+
+.cart-gift-dialog__panel {
+  position: relative;
+  z-index: 1;
+  width: min(430px, calc(100vw - 32px));
+  max-height: min(680px, calc(100dvh - 40px));
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
+}
+
+.cart-gift-dialog__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #f3f3f3;
+  font-size: 1.15rem;
+}
+
+.cart-gift-dialog__eyebrow {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: #6b7280;
+}
+
+.cart-gift-dialog h3 {
+  margin: 0 42px 8px 0;
+  font-size: 1.35rem;
+}
+
+.cart-gift-dialog__copy {
+  margin: 0 0 20px;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.cart-gift-check {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 15px;
+  border: 1px solid #e7e7e7;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.cart-gift-check input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #111;
+}
+
+.cart-gift-check span {
+  display: grid;
+  gap: 3px;
+}
+
+.cart-gift-check small,
+.cart-gift-note > small {
+  color: #777;
+  font-size: 0.78rem;
+}
+
+.cart-gift-note {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.cart-gift-note textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 110px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  font: inherit;
+  line-height: 1.45;
+}
+
+.cart-gift-note textarea:focus {
+  outline: none;
+  border-color: #111;
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
+}
+
+.cart-gift-dialog__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 22px;
+}
+
+.cart-gift-cancel,
+.cart-gift-save {
+  min-height: 44px;
+  border-radius: 10px;
+  padding: 0 16px;
+  font-weight: 900;
+}
+
+.cart-gift-cancel {
+  background: #f2f2f2;
+}
+
+.cart-gift-save {
+  background: #111;
+  color: #fff;
+}
+
+.cart-gift-save:disabled {
+  opacity: 0.6;
+}
+
+body.gift-dialog-open {
+  overflow: hidden;
+}
+
+
+/* Gift modal desktop viewport + checkbox polish */
+.cart-gift-check {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.cart-gift-check input {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  flex: none;
+}
+
+.cart-gift-check__copy {
+  min-width: 0;
+  width: 100%;
+}
+
+.cart-gift-check__copy strong {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.cart-gift-check__copy em {
+  flex: 0 0 auto;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.cart-summary-gift {
+  padding-bottom: 8px;
+  color: #555;
+  font-size: 0.86rem;
+}
+
+@media (min-width: 769px) {
+  body.gift-dialog-open .cart-drawer {
+    transform: none !important;
+  }
+
+  .cart-gift-dialog {
+    width: 100vw;
+    height: 100dvh;
+  }
+
+  .cart-gift-dialog__panel {
+    width: min(520px, calc(100vw - 48px));
+    max-height: min(720px, calc(100dvh - 64px));
+    padding: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cart-gift-dialog__panel {
+    width: min(430px, calc(100vw - 32px));
+  }
+}
+
+
+/* Tiered gift choices */
+.cart-gift-tiers {
+  display: grid;
+  gap: 10px;
+}
+
+.cart-gift-tier {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding: 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.cart-gift-tier:hover {
+  border-color: #bdbdbd;
+  background: #fafafa;
+}
+
+.cart-gift-tier input {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: #111;
+}
+
+.cart-gift-tier__copy {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.cart-gift-tier__copy strong {
+  font-size: 0.92rem;
+}
+
+.cart-gift-tier__copy small {
+  color: #6f6f6f;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.cart-gift-tier__price {
+  white-space: nowrap;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.cart-gift-tier--premium {
+  border-color: #cfcfcf;
+}
+
+.cart-gift-tier:has(input:checked) {
+  border-color: #111;
+  box-shadow: 0 0 0 1px #111;
+  background: #fbfbfb;
+}
+
+
+/* Gift option radio alignment */
+.cart-gift-tier {
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.cart-gift-tier input[type="radio"] {
+  appearance: auto;
+  -webkit-appearance: radio;
+  width: 18px !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  margin: 2px 0 0 !important;
+  padding: 0 !important;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: none;
+  accent-color: #111;
+  justify-self: start;
+}
+
+.cart-gift-tier__copy {
+  padding-left: 0;
+}
