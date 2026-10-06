@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <title>Skanare – Create Account</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+
+    <link rel="icon" type="image/webp" href="/assets/img/logo_Image.png">
+
+
+  <link
+    rel="stylesheet"
+    href="/assets/css/reset.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="/assets/css/theme.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="/assets/css/layout.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="/assets/css/components.css?v=2.3"
+  />
+
+  <meta
+    name="description"
+    content="Create your Skanare account."
+  />
+
+  <meta
+    name="robots"
+    content="index, follow"
+  />
+
+  <link
+    rel="canonical"
+    href="https://skanare.com/register"
+  />
+
+  <meta
+    property="og:site_name"
+    content="Skanare"
+  />
+
+  <meta
+    property="og:type"
+    content="website"
+  />
+
+  <meta
+    property="og:title"
+    content="Skanare | QR Clothing & Accessories"
+  />
+
+  <meta
+    property="og:description"
+    content="QR clothing and accessories for creators, brands and events."
+  />
+
+  <meta
+    property="og:url"
+    content="https://skanare.com/"
+  />
+
+  <meta
+    property="og:image"
+    content="https://skanare.com/assets/img/logo_Image.png"
+  />
+
+  <meta
+    name="twitter:card"
+    content="summary_large_image"
+  />
+
+
+  <script type="text/javascript">
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID =
+      "5001afeb-b9df-4288-92c2-6febe12a2a03";
+
+    (function () {
+      const d = document;
+      const s = d.createElement("script");
+
+      s.src =
+        "https://client.crisp.chat/l.js";
+
+      s.async = true;
+
+      d
+        .getElementsByTagName("head")[0]
+        .appendChild(s);
+    })();
+  </script>
+</head>
+
+
+<body>
+
+  <!-- HEADER -->
+
+  <header class="site-header">
+
+    <div class="container header-content">
+
+      <button
+        id="menuToggle"
+        class="menu-toggle"
+        type="button"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="mainNav"
+      >
+        ☰
+      </button>
+
+
+      <nav
+        id="mainNav"
+        class="main-nav"
+        aria-label="Main navigation"
+      >
+
+        <div class="nav-left">
+
+          <a
+            href="/products?category=tshirt"
+          >
+            QR Clothing
+          </a>
+
+          <a
+            href="/products?category=accessory"
+          >
+            QR Accessories
+          </a>
+
+        </div>
+
+
+        <div class="nav-right">
+
+          <a
+            href="/src/pages/contact/contact.html"
+          >
+            Contact
+          </a>
+
+          <a href="/index.html#how">
+            How it works
+          </a>
+
+        </div>
+
+      </nav>
+
+
+      <a
+        href="/index.html"
+        class="logo"
+        aria-label="Skanare home"
+      >
+
+        <img
+          class="logo-img"
+          src="/assets/img/logo_Image.png"
+          alt="Skanare logo"
+        />
+
+        <span class="logo-text">
+          Skanare
+        </span>
+
+      </a>
+
+
+      <div class="header-actions">
+
+        <div class="account-menu">
+
+          <button
+            class="header-icon-link account-btn"
+            type="button"
+            aria-label="Account menu"
+            aria-expanded="false"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle
+                cx="12"
+                cy="8"
+                r="4"
+              ></circle>
+
+              <path
+                d="M4 21c0-4 3.5-7 8-7s8 3 8 7"
+              ></path>
+            </svg>
+
+          </button>
+
+          <div
+            class="account-dropdown hidden"
+          ></div>
+
+        </div>
+
+
+        <a
+          href="/src/pages/cart/cart.html"
+          class="header-icon-link cart-link"
+          aria-label="Cart"
+        >
+
+          <svg
+            viewBox="0 0 22 22"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+
+            <path
+              d="M14.666 7.333a3.666 3.666 0 1 1-7.333 0M3.33 6.785l-.642 7.7c-.137 1.654-.206 2.48.073 3.119a2.75 2.75 0 0 0 1.21 1.314c.612.332 1.442.332 3.102.332h7.853c1.66 0 2.49 0 3.103-.332a2.75 2.75 0 0 0 1.21-1.314c.279-.638.21-1.465.072-3.12l-.642-7.7c-.118-1.423-.178-2.134-.493-2.673A2.75 2.75 0 0 0 16.99 3.02c-.563-.269-1.277-.269-2.705-.269h-6.57c-1.428 0-2.142 0-2.705.27A2.75 2.75 0 0 0 3.823 4.11c-.315.539-.374 1.25-.493 2.674Z"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+
+          </svg>
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- REGISTER -->
+
+
+<!-- =========================================
+     REGISTER
+     ========================================= -->
+
+<main class="auth-split auth-split--register">
+
+  <!-- =========================================
+       LEFT — BRAND
+       ========================================= -->
+
+  <section class="auth-split__visual">
+
+    <div class="auth-split__visual-inner">
+
+      <span class="auth-split__eyebrow">
+        Skanare account
+      </span>
+
+      <h1 class="auth-split__title">
+        Your QR.
+        <br />
+        Your link.
+        <br />
+        Your story.
+      </h1>
+
+      <p class="auth-split__lead">
+        Create your account and manage your
+        QR destinations whenever you need.
+      </p>
+
+      <div class="auth-split__brand-note">
+
+        <span></span>
+
+        <p>
+          One QR. Unlimited possibilities.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================================
+       RIGHT — REGISTER FORM
+       ========================================= -->
+
+  <section class="auth-split__form-side">
+
+    <div class="auth-panel auth-panel--register">
+
+      <div class="auth-heading">
+
+        <span class="auth-eyebrow">
+          Join Skanare
+        </span>
+
+        <h2>
+          Create account
+        </h2>
+
+        <p class="auth-sub">
+          Create your account to manage your QR
+          products and destinations.
+        </p>
+
+      </div>
+
+
+
+      <!-- GOOGLE -->
+
+      <button
+        type="button"
+        class="auth-google"
+      >
+
+        <img
+          src="https://www.svgrepo.com/show/475656/google-color.svg"
+          alt=""
+          aria-hidden="true"
+        />
+
+        <span>
+          Continue with Google
+        </span>
+
+      </button>
+
+
+
+      <div class="auth-divider">
+
+        <span>
+          or create account with email
+        </span>
+
+      </div>
+
+
+
+      <!-- =====================================
+           REGISTER FORM
+
+           IMPORTANT:
+           IDs + names remain unchanged.
+           ===================================== -->
+
+      <form
+        id="registerForm"
+        class="auth-form"
+      >
+
+        <!-- NAME -->
+
+        <div class="auth-field-row">
+
+          <label class="auth-field">
+
+            <span>
+              First name
+            </span>
+
+            <input
+              name="firstName"
+              autocomplete="given-name"
+              placeholder="First name"
+              required
+            />
+
+          </label>
+
+
+          <label class="auth-field">
+
+            <span>
+              Last name
+            </span>
+
+            <input
+              name="lastName"
+              autocomplete="family-name"
+              placeholder="Last name"
+              required
+            />
+
+          </label>
+
+        </div>
+
+
+
+        <!-- EMAIL -->
+
+        <label class="auth-field">
+
+          <span>
+            Email address
+          </span>
+
+          <input
+            name="email"
+            type="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            required
+          />
+
+        </label>
+
+
+
+        <!-- PASSWORDS -->
+
+        <div class="auth-field-row auth-field-row--passwords">
+
+          <label class="auth-field">
+
+            <span>
+              Password
+            </span>
+
+            <input
+              name="password"
+              type="password"
+              autocomplete="new-password"
+              placeholder="Create password"
+              required
+            />
+
+          </label>
+
+
+          <label class="auth-field">
+
+            <span>
+              Confirm password
+            </span>
+
+            <input
+              name="confirmPassword"
+              type="password"
+              autocomplete="new-password"
+              placeholder="Confirm password"
+              required
+            />
+
+          </label>
+
+        </div>
+
+
+
+        <!-- TERMS -->
+
+        <p class="auth-terms-note">
+          By creating an account, you agree to our
+
+          <a
+            href="/src/pages/terms/terms.html"
+          >
+            Terms of Service
+          </a>
+
+          and
+
+          <a
+            href="/src/pages/privacy-policy/privacy-policy.html"
+          >
+            Privacy Policy
+          </a>.
+        </p>
+
+
+
+        <!-- SUBMIT -->
+
+        <button
+          type="submit"
+          class="auth-submit"
+        >
+          Create account
+        </button>
+
+
+
+        <p
+          id="status"
+          class="auth-status"
+          aria-live="polite"
+        ></p>
+
+      </form>
+
+
+
+      <!-- LOGIN SWITCH -->
+
+      <div class="auth-account-switch">
+
+        <span>
+          Already have an account?
+        </span>
+
+        <a
+          id="loginLink"
+          href="/login"
+        >
+          Sign in
+        </a>
+
+      </div>
+
+
+
+      <!-- SECURE -->
+
+      <div class="auth-secure-note">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+
+          <rect
+            x="5"
+            y="10"
+            width="14"
+            height="10"
+            rx="2"
+          ></rect>
+
+          <path
+            d="M8 10V7a4 4 0 0 1 8 0v3"
+          ></path>
+
+        </svg>
+
+        Your account information is securely protected
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+  <!-- FOOTER -->
+
+  <footer class="site-footer">
+
+    <div class="container footer-main">
+
+      <div class="footer-brand">
+
+        <a
+          href="/index.html"
+          class="footer-logo"
+        >
+          Skanare
+        </a>
+
+        <p class="footer-description">
+          QR clothing and accessories that connect
+          what you wear with your digital world.
+        </p>
+
+        <p class="footer-tagline">
+          Dynamic QR. Your link. Your story.
+        </p>
+
+        <a
+          href="mailto:hello@skanare.com"
+          class="footer-email"
+        >
+          hello@skanare.com
+        </a>
+
+      </div>
+
+
+
+      <div class="footer-desktop-nav">
+
+        <div class="footer-column">
+
+          <h4>My Account</h4>
+
+          <ul>
+
+            <li>
+              <a href="/src/pages/my-qr/my-qr.html">
+                <span>My QR Codes</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/src/pages/login/login.html">
+                <span>Sign In</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/src/pages/register/register.html">
+                <span>Create Account</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+          </ul>
+
+        </div>
+
+
+        <div class="footer-column">
+
+          <h4>Shop</h4>
+
+          <ul>
+
+            <li>
+              <a
+                href="/products?category=tshirt"
+              >
+                <span>QR Clothing</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="/products?category=accessory"
+              >
+                <span>QR Accessories</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/index.html#how">
+                <span>How it works</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+          </ul>
+
+        </div>
+
+
+        <div class="footer-column">
+
+          <h4>Company</h4>
+
+          <ul>
+
+            <li>
+              <a href="/src/pages/about/about.html">
+                <span>About Us</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/src/pages/contact/contact.html">
+                <span>Contact</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/index.html#faq">
+                <span>FAQ</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="/src/pages/payment-security/payment-security.html"
+              >
+                <span>Payment &amp; Security</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+          </ul>
+
+        </div>
+
+
+        <div class="footer-column">
+
+          <h4>Policies</h4>
+
+          <ul>
+
+            <li>
+              <a
+                href="/src/pages/shipping-policy/shipping-policy.html"
+              >
+                <span>Shipping Policy</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="/src/pages/refund-policy/refund-policy.html"
+              >
+                <span>Refund &amp; Returns</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="/src/pages/privacy-policy/privacy-policy.html"
+              >
+                <span>Privacy Policy</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/src/pages/terms/terms.html">
+                <span>Terms of Service</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="/src/pages/cookie-policy/cookie-policy.html"
+              >
+                <span>Cookie Policy</span>
+                <span class="footer-arrow">↗</span>
+              </a>
+            </li>
+
+          </ul>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="footer-mobile-nav">
+
+        <details class="footer-mobile-section">
+
+          <summary>
+            <span>My Account</span>
+            <span class="footer-chevron"></span>
+          </summary>
+
+          <div class="footer-mobile-content">
+
+            <a href="/src/pages/my-qr/my-qr.html">
+              My QR Codes
+            </a>
+
+            <a href="/src/pages/login/login.html">
+              Sign In
+            </a>
+
+            <a href="/src/pages/register/register.html">
+              Create Account
+            </a>
+
+          </div>
+
+        </details>
+
+
+        <details class="footer-mobile-section">
+
+          <summary>
+            <span>Shop</span>
+            <span class="footer-chevron"></span>
+          </summary>
+
+          <div class="footer-mobile-content">
+
+            <a
+              href="/products?category=tshirt"
+            >
+              QR Clothing
+            </a>
+
+            <a
+              href="/products?category=accessory"
+            >
+              QR Accessories
+            </a>
+
+            <a href="/index.html#how">
+              How it works
+            </a>
+
+          </div>
+
+        </details>
+
+
+        <details class="footer-mobile-section">
+
+          <summary>
+            <span>Company</span>
+            <span class="footer-chevron"></span>
+          </summary>
+
+          <div class="footer-mobile-content">
+
+            <a href="/src/pages/about/about.html">
+              About Us
+            </a>
+
+            <a href="/src/pages/contact/contact.html">
+              Contact
+            </a>
+
+            <a href="/index.html#faq">
+              FAQ
+            </a>
+
+            <a
+              href="/src/pages/payment-security/payment-security.html"
+            >
+              Payment &amp; Security
+            </a>
+
+          </div>
+
+        </details>
+
+
+        <details class="footer-mobile-section">
+
+          <summary>
+            <span>Policies</span>
+            <span class="footer-chevron"></span>
+          </summary>
+
+          <div class="footer-mobile-content">
+
+            <a
+              href="/src/pages/shipping-policy/shipping-policy.html"
+            >
+              Shipping Policy
+            </a>
+
+            <a
+              href="/src/pages/refund-policy/refund-policy.html"
+            >
+              Refund &amp; Returns
+            </a>
+
+            <a
+              href="/src/pages/privacy-policy/privacy-policy.html"
+            >
+              Privacy Policy
+            </a>
+
+            <a href="/src/pages/terms/terms.html">
+              Terms of Service
+            </a>
+
+            <a
+              href="/src/pages/cookie-policy/cookie-policy.html"
+            >
+              Cookie Policy
+            </a>
+
+          </div>
+
+        </details>
+
+      </div>
+
+    </div>
+
+
+    <div class="container footer-bottom">
+
+      <small>
+        © 2026 Skanare. All rights reserved.
+      </small>
+
+      <div class="footer-bottom-links">
+
+        <a
+          href="/src/pages/privacy-policy/privacy-policy.html"
+        >
+          Privacy
+        </a>
+
+        <a
+          href="/src/pages/terms/terms.html"
+        >
+          Terms
+        </a>
+
+        <a
+          href="/src/pages/cookie-policy/cookie-policy.html"
+        >
+          Cookies
+        </a>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+
+  <div
+    id="cartOverlay"
+    class="cart-overlay hidden"
+  ></div>
+
+  <aside
+    id="cartDrawer"
+    class="cart-drawer hidden"
+  >
+
+    <header class="cart-header">
+
+      <h2>Your Cart</h2>
+
+      <button
+        id="closeCart"
+        type="button"
+      >
+        ✕
+      </button>
+
+    </header>
+
+    <div
+      id="cartDrawerContent"
+    ></div>
+
+  </aside>
+
+
+  <script
+    type="module"
+    src="./register.ts"
+  ></script>
+
+  <script
+    type="module"
+    src="/src/pages/cart/cart.ts"
+  ></script>
+
+</body>
+</html>
