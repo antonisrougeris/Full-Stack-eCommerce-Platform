@@ -385,8 +385,6 @@ async function refreshOnce(reason) {
       english.products,
     featuredProducts:
       english.featuredProducts,
-    featuredProducts:
-      english.featuredProducts,
     greekProducts:
       greek.products,
   };
