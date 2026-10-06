@@ -4,12 +4,12 @@ import { corsOptions, getAllowedOrigins } from "../src/config/security.js";
 
 test("normalizes configured CORS origins", () => {
   const previous = process.env.CORS_ORIGIN;
-  process.env.CORS_ORIGIN = "https://skanare.com/, https://www.skanare.com/path";
+  process.env.CORS_ORIGIN = "https://shop.example.com/, https://www.shop.example.com/path";
 
   try {
     assert.deepEqual(getAllowedOrigins(), [
-      "https://skanare.com",
-      "https://www.skanare.com",
+      "https://shop.example.com",
+      "https://www.shop.example.com",
     ]);
   } finally {
     if (previous === undefined) delete process.env.CORS_ORIGIN;
@@ -48,7 +48,7 @@ test("requires CORS_ORIGIN in production", () => {
 test("allows only configured browser origins and server-to-server requests", async () => {
   const previousOrigin = process.env.CORS_ORIGIN;
   const previousEnv = process.env.NODE_ENV;
-  process.env.CORS_ORIGIN = "https://skanare.com";
+  process.env.CORS_ORIGIN = "https://shop.example.com";
   process.env.NODE_ENV = "production";
 
   try {
@@ -62,7 +62,7 @@ test("allows only configured browser origins and server-to-server requests", asy
         });
       });
 
-    assert.equal(await decide("https://skanare.com"), true);
+    assert.equal(await decide("https://shop.example.com"), true);
     assert.equal(await decide("https://evil.example"), false);
     assert.equal(await decide(undefined), true);
   } finally {
