@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <title>Payment & Security | Skanare</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+
+    <link rel="icon" type="image/webp" href="/assets/img/logo_Image.png">
+
+
+  <meta
+    name="description"
+    content="Learn how payments are processed securely on Skanare and how we protect your account and QR products."
+  />
+
+  <meta name="robots" content="index, follow" />
+
+  <link
+    rel="canonical"
+    href="https://skanare.com/payment-security"
+  />
+
+  <link rel="stylesheet" href="/assets/css/reset.css" />
+  <link rel="stylesheet" href="/assets/css/theme.css" />
+  <link rel="stylesheet" href="/assets/css/layout.css" />
+  <link rel="stylesheet" href="/assets/css/components.css?v=2.1" />
+
+  <script type="text/javascript">
+    window.$crisp=[];
+    window.CRISP_WEBSITE_ID="5001afeb-b9df-4288-92c2-6febe12a2a03";
+    (function(){
+      d=document;
+      s=d.createElement("script");
+      s.src="https://client.crisp.chat/l.js";
+      s.async=1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    })();
+  </script>
+</head>
+
+<body>
+
+  <div id="siteHeader"></div>
+
+  <main class="static-page">
+
+    <section class="static-hero">
+      <div class="container static-container">
+
+        <span class="static-eyebrow">
+          PAYMENT & SECURITY
+        </span>
+
+        <h1>
+          Safe checkout. Secure experience.
+        </h1>
+
+        <p class="static-lead">
+          We designed the Skanare checkout experience
+          to keep payment processing and account access
+          secure and straightforward.
+        </p>
+
+      </div>
+    </section>
+
+
+    <section class="static-content">
+      <div class="container static-container">
+
+        <h2>
+          Secure online payments
+        </h2>
+
+        <p>
+          Card payments on Skanare are processed
+          through Viva.com using its secure checkout environment.
+        </p>
+
+        <p>
+          Skanare does not need to store your complete
+          payment card number in order to process and fulfil
+          your purchase.
+        </p>
+
+
+        <h2>
+          Payment confirmation
+        </h2>
+
+        <p>
+          An order is treated as successfully paid
+          only after payment confirmation is received
+          through our payment processing system.
+        </p>
+
+        <p>
+          Once payment is confirmed,
+          the order can proceed to fulfilment
+          and any eligible dynamic QR product
+          can be assigned to your account.
+        </p>
+
+
+        <h2>
+          Account security
+        </h2>
+
+        <p>
+          Customer accounts are protected through
+          authenticated access.
+        </p>
+
+        <p>
+          Certain account functions,
+          including management of purchased QR codes,
+          are available only to the authenticated account
+          associated with those products.
+        </p>
+
+
+        <h2>
+          Your dynamic QR
+        </h2>
+
+        <p>
+          Each eligible dynamic QR product
+          is associated with a unique QR identifier.
+        </p>
+
+        <p>
+          Updating the destination URL
+          does not require replacing the QR printed
+          on your physical Skanare product.
+        </p>
+
+
+        <h2>
+          Suspicious activity
+        </h2>
+
+        <p>
+          If you believe someone has gained unauthorised
+          access to your Skanare account,
+          change your password and contact us as soon as possible.
+        </p>
+
+
+        <div class="static-callout">
+          <strong>
+            Need help with a payment?
+          </strong>
+
+          <p>
+            Contact us at
+            <a href="mailto:hello@skanare.com">
+              hello@skanare.com
+            </a>.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <div id="siteFooter"></div>
+
+  <div
+    id="cartOverlay"
+    class="cart-overlay hidden"
+  ></div>
+
+  <aside
+    id="cartDrawer"
+    class="cart-drawer hidden"
+  >
+    <header class="cart-header">
+      <h2>Your Cart</h2>
+
+      <button
+        id="closeCart"
+        type="button"
+        aria-label="Close cart"
+      >
+        ✕
+      </button>
+    </header>
+
+    <div id="cartDrawerContent"></div>
+  </aside>
+
+  <script
+    type="module"
+    src="./payment-security.ts"
+  ></script>
+
+  <script
+    type="module"
+    src="/src/pages/cart/cart.ts"
+  ></script>
+
+</body>
+</html>
