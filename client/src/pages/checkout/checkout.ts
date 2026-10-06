@@ -9,7 +9,7 @@ import {
   parsePhoneNumberFromString,
   type CountryCode,
 } from "libphonenumber-js";
-const CHECKOUT_DRAFT_KEY = "skanare_checkout_draft";
+const CHECKOUT_DRAFT_KEY = "commerce_checkout_draft";
 const PREMIUM_GIFT_PRICE = 1.5;
 import { setFlashToast } from "../../utils/toast.ts";
 import { normalizeSameOriginPath } from "../../utils/redirect";
@@ -116,9 +116,6 @@ function getCartItemVariant(item: CartItem) {
   return item.variant || null;
 }
 
-function getCartItemQr(item: CartItem): string {
-  return item.qrDestination || "";
-}
 
 function calculateShipping(
   subtotal: number
@@ -127,7 +124,7 @@ function calculateShipping(
     return 0;
   }
 
-  return 2.0;
+  return 4.9;
 }
 
 function setPayButtonState(): void {
@@ -271,7 +268,6 @@ async function render(): Promise<void> {
       const variant = getCartItemVariant(item);
       const title = escapeHtml(getCartItemTitle(item));
       const image = escapeHtml(getCartItemImage(item));
-      const qr = escapeHtml(getCartItemQr(item));
       const quantity = Number(item.quantity || 0);
 
       return `
@@ -284,7 +280,6 @@ async function render(): Promise<void> {
           <div class="checkout-item__info">
             <p>${title}</p>
             <small>Size: ${escapeHtml(variant?.size || "-")}</small>
-            ${qr ? `<small>${qr}</small>` : ""}
           </div>
 
           <strong>${formatPrice(itemTotal)}</strong>
@@ -352,22 +347,9 @@ if (msg) {
         amountLeft
       )} for FREE shipping`;
 
-  } else if (
-    discountedSubtotal < 80
-  ) {
-
-    const amountLeft =
-      80 - discountedSubtotal;
-
-    msg.textContent =
-      `Add ${formatPrice(
-        amountLeft
-      )} more to get a FREE sticker set`;
-
   } else {
-
     msg.textContent =
-      "FREE Skanare sticker set added 🎁";
+      "FREE shipping unlocked";
 
     msg.classList.add(
       "is-unlocked"
@@ -548,58 +530,6 @@ function readInvoiceDetails(form: FormData) {
 }
 
 
-function updateLockerValidity(showError = false): boolean {
-  const lockerInput = document.getElementById("lockerInput") as HTMLInputElement | null;
-  const lockerMessage = document.getElementById("lockerValidationMessage");
-  const lockerButton = document.getElementById("selectLockerBtn") as HTMLButtonElement | null;
-
-  if (!lockerInput) return false;
-
-  const user = firebaseAuth.currentUser;
-  if (!user) {
-    lockerInput.setCustomValidity("");
-    lockerButton?.classList.remove("is-invalid");
-    lockerButton?.removeAttribute("aria-invalid");
-
-    if (lockerMessage) {
-      lockerMessage.textContent = "";
-      lockerMessage.hidden = true;
-    }
-
-    return true;
-  }
-
-  const lockerValue = String(lockerInput.value || "").trim();
-  const hasLocker = Boolean(lockerValue);
-  const errorMessage = "Please select a BOX NOW locker before continuing.";
-
-  lockerInput.setCustomValidity(hasLocker ? "" : errorMessage);
-
-  if (hasLocker) {
-    lockerButton?.classList.remove("is-invalid");
-    lockerButton?.removeAttribute("aria-invalid");
-
-    if (lockerMessage) {
-      lockerMessage.textContent = "";
-      lockerMessage.hidden = true;
-    }
-
-    return true;
-  }
-
-  if (showError) {
-    lockerButton?.classList.add("is-invalid");
-    lockerButton?.setAttribute("aria-invalid", "true");
-
-    if (lockerMessage) {
-      lockerMessage.textContent = errorMessage;
-      lockerMessage.hidden = false;
-    }
-  }
-
-  return false;
-}
-
 function readAndValidateCheckoutForm(
   form: FormData,
   fallbackEmail = ""
@@ -673,15 +603,54 @@ function readAndValidateCheckoutForm(
   }
 
 
+  const addressLine1 =
+    getRequiredFormString(
+      form,
+      "addressLine1",
+      "Address"
+    );
+
+  const city =
+    getRequiredFormString(
+      form,
+      "city",
+      "City"
+    );
+
+  const postalCode =
+    getRequiredFormString(
+      form,
+      "postalCode",
+      "Postal code"
+    );
+
+  const country =
+    getRequiredFormString(
+      form,
+      "country",
+      "Country"
+    );
+
   return {
     firstName,
     lastName,
     email,
-
-    phone:
-      parsedPhone.number,
-
+    phone: parsedPhone.number,
     phoneCountryCode,
+    shippingAddress: {
+      firstName,
+      lastName,
+      email,
+      phone: parsedPhone.number,
+      country,
+      city,
+      postalCode,
+      addressLine1,
+      addressLine2:
+        String(
+          form.get("addressLine2") || ""
+        ).trim(),
+    },
   };
 }
 
@@ -699,11 +668,11 @@ function normalizeRoutePath(
 }
 
 function restoreAfterAuth(): void {
-  const flag = localStorage.getItem("skanare_returning_from_auth");
+  const flag = localStorage.getItem("commerce_returning_from_auth");
 
   if (flag === "1") {
     restoreCheckoutDraft();
-    localStorage.removeItem("skanare_returning_from_auth");
+    localStorage.removeItem("commerce_returning_from_auth");
   }
 }
 
@@ -747,7 +716,6 @@ editCartButton?.addEventListener(
       keepDigitsOnly(target as HTMLInputElement);
     }
     updatePhoneValidity();
-    updateLockerValidity();
     saveCheckoutDraftFromPage();
 
     if (target?.name === "personalNote") {
@@ -823,7 +791,6 @@ editCartButton?.addEventListener(
       event.target as HTMLInputElement | HTMLTextAreaElement | null;
 
     updatePhoneValidity();
-    updateLockerValidity();
     saveCheckoutDraftFromPage();
 
     if (
@@ -834,14 +801,13 @@ editCartButton?.addEventListener(
     }
   });
   updatePhoneValidity();
-  updateLockerValidity();
 
   firebaseAuth.onAuthStateChanged(() => {
     setPayButtonState();
     void render();
   });
 
-  window.addEventListener("skanare:cart-updated", () => {
+  window.addEventListener("commerce:cart-updated", () => {
     void render();
   });
 
@@ -854,7 +820,7 @@ editCartButton?.addEventListener(
       document.getElementById("discountInput") as HTMLInputElement | null
     )?.value?.trim();
 
-    if (code === "SKANARE10") {
+    if (code === "WELCOME10") {
       discount = 10;
       setFlashToast("10% discount applied ✅");
     } else {
@@ -872,33 +838,6 @@ editCartButton?.addEventListener(
 
       const formEl = e.target as HTMLFormElement;
       const user = firebaseAuth.currentUser;
-
-      const lockerInput = document.getElementById("lockerInput") as HTMLInputElement | null;
-      const lockerValue = String(lockerInput?.value || "").trim();
-
-      if (user && !lockerValue) {
-        updateLockerValidity(true);
-
-        const lockerButton = document.getElementById(
-          "selectLockerBtn"
-        ) as HTMLButtonElement | null;
-
-        lockerButton?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-
-        window.setTimeout(() => {
-          lockerButton?.focus({ preventScroll: true });
-        }, 250);
-
-        return;
-      }
-
-      if (lockerInput) {
-        lockerInput.setCustomValidity("");
-      }
-
       if (!formEl.reportValidity()) return;
 
       let formValues;
@@ -1007,24 +946,13 @@ submitButton && (submitButton.textContent = "Preparing payment...");
     user.email || ""
   );
 
-const delivery = "boxnow" as const;
+const delivery = "home" as const;
 
 const {
   documentType,
   invoiceDetails,
 } = readInvoiceDetails(form);
 
-let locker =
-  String(
-    form.get("locker") || ""
-  ).trim();
-
-if (!locker) {
-  updateLockerValidity(true);
-  return;
-}
-
-updateLockerValidity(false);
         const result = await checkout({
   locale,
   customer: {
@@ -1034,20 +962,13 @@ updateLockerValidity(false);
     phone,
   },
 
-  shippingAddress: {
-    firstName,
-    lastName,
-    email,
-    phone,
-    country: "Greece",
-    city: "",
-    postalCode: "",
-    addressLine1: "",
-    addressLine2: "",
-  },
+  shippingAddress:
+    readAndValidateCheckoutForm(
+      form,
+      user.email || ""
+    ).shippingAddress,
 
   delivery,
-  locker,
   phoneCountryCode,
   notes: "",
   giftOptions: {

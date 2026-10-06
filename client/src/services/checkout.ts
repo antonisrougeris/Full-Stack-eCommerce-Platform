@@ -34,8 +34,7 @@ export interface CheckoutPayload {
   customer: CheckoutCustomer;
   shippingAddress: CheckoutShippingAddress;
   phoneCountryCode: string;
-  delivery?: "home" | "boxnow";
-  locker?: string;
+  delivery?: "home";
   notes?: string;
   giftOptions?: {
     tier: "none" | "simple" | "premium";
@@ -49,7 +48,6 @@ export interface CheckoutPayload {
 export interface CheckoutResult {
   orderId: string;
   orderNumber?: string;
-  qrCodesCreated?: number;
   order?: unknown;
   vivaOrderCode?: string;
   checkoutUrl?: string;

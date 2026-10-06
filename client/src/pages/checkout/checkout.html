@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Skanare - Checkout</title>
+  <title>NovaStore - Checkout</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/webp" href="/assets/img/logo_Image.png">
 
@@ -10,35 +10,34 @@
   <link rel="stylesheet" href="/assets/css/theme.css" />
   <link rel="stylesheet" href="/assets/css/layout.css" />
   <link rel="stylesheet" href="/assets/css/components.css?v=5.1-gift-toggle" />
-  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="5001afeb-b9df-4288-92c2-6febe12a2a03";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
-<meta
+  <meta
   name="description"
-  content="Skanare creates QR clothing and accessories that connect your style with your digital identity."
+  content="NovaStore is a modern online store built for fast, secure shopping."
 />
 
 <meta name="robots" content="index, follow" />
 
-<link rel="canonical" href="https://skanare.com/checkout" />
+<link rel="canonical" href="https://example.com/checkout" />
 
 
-<meta property="og:site_name" content="Skanare" />
+<meta property="og:site_name" content="NovaStore" />
 
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Skanare | QR Clothing & Accessories" />
+<meta property="og:title" content="NovaStore | Modern eCommerce Store" />
 <meta
   property="og:description"
-  content="QR clothing and accessories for creators, brands and events."
+  content="A modern full-stack eCommerce storefront."
 />
-<meta property="og:url" content="https://skanare.com/" />
-<meta property="og:image" content="https://skanare.com/assets/img/logo_Image.png" />
+<meta property="og:url" content="https://example.com/" />
+<meta property="og:image" content="https://example.com/assets/img/logo_Image.png" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Skanare | QR Clothing & Accessories" />
+<meta name="twitter:title" content="NovaStore | Modern eCommerce Store" />
 <meta
   name="twitter:description"
-  content="QR clothing and accessories for creators, brands and events."
+  content="A modern full-stack eCommerce storefront."
 />
-<meta name="twitter:image" content="https://skanare.com/assets/img/logo_Image.png" />
+<meta name="twitter:image" content="https://example.com/assets/img/logo_Image.png" />
 </head>
 
 <body>
@@ -70,9 +69,9 @@
         </div>
       </nav>
   
-      <a href="/index.html" class="logo" aria-label="Skanare home">
-        <img class="logo-img" src="/assets/img/logo_Image.png" alt="Skanare logo" />
-        <span class="logo-text">Skanare</span>
+      <a href="/index.html" class="logo" aria-label="NovaStore home">
+        <img class="logo-img" src="/assets/img/logo_Image.png" alt="NovaStore logo" />
+        <span class="logo-text">NovaStore</span>
       </a>
   
       <div class="header-actions">
@@ -127,7 +126,7 @@
         <h1>Checkout</h1>
 
         <p class="checkout-hero-text">
-  Enter your details and select the BOX NOW locker where you want to receive your order.
+  Enter your contact and delivery details to complete your order securely.
 </p>
       </header>
 
@@ -236,129 +235,85 @@
       </section>
 
 
-      <!-- BOX NOW -->
+      <!-- SHIPPING ADDRESS -->
       <section class="checkout-page__section">
-
         <div class="checkout-section-heading">
-
           <span>02</span>
-
           <div>
-            <h2>Delivery</h2>
-
-            <p>
-              Your order will be delivered to a
-              BOX NOW locker.
-            </p>
+            <h2>Shipping address</h2>
+            <p>Tell us where you want your order delivered.</p>
           </div>
-
         </div>
 
+        <input type="hidden" name="delivery" value="home" />
 
-        <!-- fixed delivery method -->
-        <input
-          type="hidden"
-          name="delivery"
-          value="boxnow"
-        />
+        <div class="checkout-fields">
+          <label class="checkout-field">
+            <span>Address</span>
+            <input
+              name="addressLine1"
+              autocomplete="shipping street-address"
+              placeholder="Street and number"
+              required
+            />
+          </label>
 
+          <label class="checkout-field">
+            <span>Apartment, suite, etc. <small>(optional)</small></span>
+            <input
+              name="addressLine2"
+              autocomplete="shipping address-line2"
+              placeholder="Apartment, floor, company"
+            />
+          </label>
 
-        <div class="boxnow-delivery">
+          <div class="checkout-field-row">
+            <label class="checkout-field">
+              <span>City</span>
+              <input
+                name="city"
+                autocomplete="shipping address-level2"
+                placeholder="City"
+                required
+              />
+            </label>
 
-          <div class="boxnow-delivery__top">
-
-            <div class="boxnow-delivery__brand">
-              <strong>BOX NOW</strong>
-
-              <span>
-                Locker delivery
-              </span>
-            </div>
-
-            <span class="boxnow-delivery__price">
-              €2.00
-            </span>
-
+            <label class="checkout-field">
+              <span>Postal code</span>
+              <input
+                name="postalCode"
+                autocomplete="shipping postal-code"
+                placeholder="Postal code"
+                required
+              />
+            </label>
           </div>
 
-
-          <p class="boxnow-delivery__description">
-              Choose a BOX NOW locker for your delivery.
-
-          </p>
-
-
-<!-- BOX NOW modal -->
-<div id="boxnowModal" class="boxnow-modal" aria-hidden="true">
-
-  <div class="boxnow-modal__backdrop"></div>
-
-  <div class="boxnow-modal__dialog">
-
-    <button
-      id="boxnowModalClose"
-      class="boxnow-modal__close"
-      type="button"
-      aria-label="Close locker map"
-    >
-      ×
-    </button>
-
-    <div id="boxnowmap"></div>
-
-  </div>
-
-</div>
-
-<button
-  id="selectLockerBtn"
-  class="boxnow-locker-btn boxnow-widget-button"
-  type="button"
->
-  Choose a BOX NOW locker
-</button>
-
-<small
-  id="lockerValidationMessage"
-  class="field-error locker-error"
-  aria-live="polite"
-  hidden
-></small>
-
-
-          <div
-            id="selectedLockerBox"
-            class="selected-locker"
-            hidden
-          >
-
-            <span class="selected-locker__icon">
-              ✓
-            </span>
-
-            <div>
-              <small>Selected locker</small>
-
-              <strong id="selectedLockerText">
-                BOX NOW locker selected
-              </strong>
-
-              
-            </div>
-
-            
-
-          </div>
-
-
-          <input
-            id="lockerInput"
-            name="locker"
-            type="hidden"
-          />
-
+          <label class="checkout-field">
+            <span>Country</span>
+            <select
+              name="country"
+              autocomplete="shipping country"
+              required
+            >
+              <option value="Greece">Greece</option>
+              <option value="Cyprus">Cyprus</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Germany">Germany</option>
+              <option value="France">France</option>
+              <option value="Italy">Italy</option>
+              <option value="Spain">Spain</option>
+              <option value="Ireland">Ireland</option>
+              <option value="Netherlands">Netherlands</option>
+              <option value="Belgium">Belgium</option>
+              <option value="Austria">Austria</option>
+              <option value="Portugal">Portugal</option>
+              <option value="United States">United States</option>
+              <option value="Canada">Canada</option>
+              <option value="Australia">Australia</option>
+            </select>
+          </label>
         </div>
-
       </section>
 
 
@@ -676,7 +631,7 @@
         href="/index.html"
         class="footer-logo"
       >
-        Skanare
+        NovaStore
       </a>
 
       <p class="footer-description">
@@ -689,10 +644,10 @@
       </p>
 
       <a
-        href="mailto:hello@skanare.com"
+        href="mailto:hello@example.com"
         class="footer-email"
       >
-        hello@skanare.com
+        hello@example.com
       </a>
 
     </div>
@@ -1066,7 +1021,7 @@
   <div class="container footer-bottom">
 
     <small>
-      © 2026 Skanare. All rights reserved.
+      © 2026 NovaStore. All rights reserved.
     </small>
 
     <div class="footer-bottom-links">
