@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Returns Center | Skanare</title>
+  <link rel="icon" type="image/webp" href="/assets/img/logo_Image.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Start and track a Skanare product return and download your BOX NOW return voucher."
+  />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="stylesheet" href="/assets/css/reset.css" />
+  <link rel="stylesheet" href="/assets/css/theme.css" />
+  <link rel="stylesheet" href="/assets/css/layout.css" />
+  <link rel="stylesheet" href="/assets/css/components.css?v=2.1" />
+  <link rel="stylesheet" href="./returns.css?v=2.2" />
+</head>
+<body>
+  <div id="siteHeader"></div>
+
+  <main class="returns-page">
+    <section class="returns-hero">
+      <div class="container returns-container">
+        <span class="returns-eyebrow">RETURNS CENTER</span>
+        <h1>Returns without the back-and-forth.</h1>
+        <p>
+          Choose the delivered items you want to return, tell us why,
+          and track every step from approval to refund.
+        </p>
+      </div>
+    </section>
+
+    <section class="returns-content">
+      <div class="container returns-container">
+        <div id="returnsAuth" class="returns-message">
+          Checking your account…
+        </div>
+
+        <div id="returnsApp" class="hidden">
+          <section class="returns-panel">
+            <div class="returns-panel__head">
+              <div>
+                <span class="returns-eyebrow">START A RETURN</span>
+                <h2>Eligible orders</h2>
+              </div>
+              <a href="/refund-policy">Return policy →</a>
+            </div>
+            <div id="eligibleOrders" class="returns-order-list"></div>
+          </section>
+
+          <section id="returnFormSection" class="returns-panel hidden">
+            <div class="returns-panel__head">
+              <div>
+                <span class="returns-eyebrow">RETURN REQUEST</span>
+                <h2 id="returnFormTitle">Select items</h2>
+              </div>
+              <button id="closeReturnForm" class="returns-link-button" type="button">
+                Cancel
+              </button>
+            </div>
+
+            <form id="returnForm">
+              <input id="returnOrderId" type="hidden" />
+              <div id="returnItems"></div>
+
+              <label class="returns-field">
+                <span>Anything else we should know? <small>(optional)</small></span>
+                <textarea
+                  id="returnCustomerNote"
+                  rows="4"
+                  maxlength="2000"
+                  placeholder="Add details that may help us review the return."
+                ></textarea>
+              </label>
+
+              <label class="returns-condition">
+                <input id="returnConditionConfirmed" type="checkbox" required />
+                <span>
+                  I confirm the selected items are the items I am returning.
+                  For change-of-mind or size returns, items should be unused,
+                  unworn and unwashed. Faulty or incorrect items can still be reported.
+                </span>
+              </label>
+
+              <div class="returns-form__footer">
+                <div>
+                  <span>Estimated item refund</span>
+                  <strong id="returnEstimate">€0.00</strong>
+                </div>
+                <button id="submitReturn" class="returns-primary" type="submit">
+                  Submit return request
+                </button>
+              </div>
+              <p id="returnFormStatus" class="returns-form-status" aria-live="polite"></p>
+            </form>
+          </section>
+
+          <section class="returns-panel">
+            <div class="returns-panel__head">
+              <div>
+                <span class="returns-eyebrow">YOUR RETURNS</span>
+                <h2>Return history</h2>
+              </div>
+            </div>
+            <div id="returnHistory" class="returns-history"></div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="siteFooter"></div>
+
+  <div
+    id="cartOverlay"
+    class="cart-overlay hidden"
+  ></div>
+
+  <aside
+    id="cartDrawer"
+    class="cart-drawer hidden"
+    aria-label="Shopping cart"
+  >
+    <header class="cart-header">
+      <h2>Your Cart</h2>
+      <button
+        id="closeCart"
+        type="button"
+        aria-label="Close cart"
+      >
+        ✕
+      </button>
+    </header>
+
+    <div id="cartDrawerContent"></div>
+  </aside>
+
+  <script type="module" src="./returns.ts"></script>
+  <script type="module" src="/src/pages/cart/cart.ts"></script>
+</body>
+</html>
