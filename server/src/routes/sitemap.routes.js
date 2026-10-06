@@ -15,7 +15,7 @@ function escapeXml(value = "") {
 
 function cleanBaseUrl() {
   return String(
-    process.env.PUBLIC_BASE_URL || "https://skanare.com"
+    process.env.PUBLIC_BASE_URL || "http://localhost:5173"
   ).replace(/\/+$/, "");
 }
 

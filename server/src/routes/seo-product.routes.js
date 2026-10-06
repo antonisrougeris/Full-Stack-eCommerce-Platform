@@ -33,9 +33,13 @@ function escapeHtml(value = "") {
     .replaceAll("'", "&#039;");
 }
 
+function storeName() {
+  return String(process.env.STORE_NAME || "NovaStore").trim() || "NovaStore";
+}
+
 function cleanBaseUrl() {
   return String(
-    process.env.PUBLIC_BASE_URL || "https://skanare.com"
+    process.env.PUBLIC_BASE_URL || "http://localhost:5173"
   ).replace(/\/+$/, "");
 }
 
@@ -61,7 +65,7 @@ function productImage(product) {
   const image =
     (Array.isArray(product.images) && product.images[0]) ||
     product.image ||
-    "/assets/img/logo_Image.png";
+    "/assets/img/placeholder-product.svg";
 
   if (/^https?:\/\//i.test(image)) {
     return image;
@@ -78,8 +82,8 @@ function productDescription(product, locale = "en") {
     product.description ||
     (
       locale === "el"
-        ? "Ρούχα και αξεσουάρ QR από το Skanare."
-        : "QR clothing and accessories by Skanare."
+        ? "Ποιοτικά προϊόντα από το ηλεκτρονικό μας κατάστημα."
+        : "Quality products from our online store."
     )
   );
 }
@@ -118,7 +122,7 @@ function productJsonLd(product, locale = "en") {
 
     brand: {
       "@type": "Brand",
-      name: "Skanare",
+      name: storeName(),
     },
 
     offers: {
@@ -138,7 +142,7 @@ function productJsonLd(product, locale = "en") {
 
       seller: {
         "@type": "Organization",
-        name: "Skanare",
+        name: storeName(),
       },
     },
   }).replace(/</g, "\\u003c");
@@ -168,7 +172,7 @@ async function renderFullProductPage(
     locale
   );
 
-  const title = `${product.title} | Skanare`;
+  const title = `${product.title} | ${storeName()}`;
 
   const description =
     productDescription(

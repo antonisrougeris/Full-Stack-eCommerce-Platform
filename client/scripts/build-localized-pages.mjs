@@ -18,7 +18,6 @@ const pages = [
   { route: "/register", source: "src/pages/register/register.html", target: "el/register/index.html" },
   { route: "/forgot-password", source: "src/pages/forgot-password/forgot-password.html", target: "el/forgot-password/index.html" },
   { route: "/verify-email", source: "src/pages/verify-email/verify-email.html", target: "el/verify-email/index.html" },
-  { route: "/my-qr", source: "src/pages/my-qr/my-qr.html", target: "el/my-qr/index.html" },
   { route: "/returns", source: "src/pages/returns/returns.html", target: "el/returns/index.html" },
   { route: "/payment/success", source: "src/pages/payment/payment_success.html", target: "el/payment/success/index.html" },
   { route: "/payment/failure", source: "src/pages/payment/payment_failure.html", target: "el/payment/failure/index.html" },
@@ -30,7 +29,11 @@ const pages = [
   { route: "/cookie-policy", source: "src/pages/cookie-policy/cookie-policy.html", target: "el/cookie-policy/index.html" },
 ];
 
-const BASE = "https://skanare.com";
+const BASE = String(
+  process.env.VITE_STORE_URL ||
+  process.env.PUBLIC_BASE_URL ||
+  "http://localhost:5173"
+).replace(/\/+$/, "");
 const phrases = catalog.phrases || {};
 
 function decodeEntities(value) {
@@ -98,7 +101,6 @@ function cleanEnglishRoute(rawPath) {
     "/src/pages/register/register.html": "/register",
     "/src/pages/forgot-password/forgot-password.html": "/forgot-password",
     "/src/pages/verify-email/verify-email.html": "/verify-email",
-    "/src/pages/my-qr/my-qr.html": "/my-qr",
     "/src/pages/returns/returns.html": "/returns",
     "/src/pages/payment/payment_success.html": "/payment/success",
     "/src/pages/payment/payment_failure.html": "/payment/failure",
@@ -186,7 +188,7 @@ function localizeLinks(html) {
 }
 
 const SHARED_CSS_VERSION =
-  "2.9-i18n-fixes";
+  "1.0-marketplace";
 
 function refreshSharedCssVersion(html) {
   return html.replace(

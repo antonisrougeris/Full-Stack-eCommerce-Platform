@@ -8,9 +8,17 @@ const distDir = fileURLToPath(
   new URL("../../../client/dist/", import.meta.url)
 );
 
-const LIVE_MARKER_PREFIX = "SKANARE_LIVE";
+const LIVE_MARKER_PREFIX = "COMMERCE_LIVE";
 
 let activeRefresh = null;
+
+function baseUrl() {
+  return String(
+    process.env.PUBLIC_BASE_URL ||
+    process.env.PUBLIC_SITE_URL ||
+    "http://localhost:5173"
+  ).replace(/\/+$/, "");
+}
 
 function escapeHtml(value = "") {
   return String(value)
@@ -145,7 +153,7 @@ export function itemListJsonLd(products, name, locale = "en") {
       (product, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        url: `https://skanare.com${productUrl(product, locale)}`,
+        url: `${baseUrl()}${productUrl(product, locale)}`,
         item: {
           "@type": "Product",
           name: product?.title || "",
@@ -305,8 +313,8 @@ async function refreshLocale({
 ${itemListJsonLd(
   [...tshirts, ...accessories],
   locale === "el"
-    ? "Προτεινόμενα προϊόντα Skanare"
-    : "Featured Skanare products",
+    ? "Προτεινόμενα προϊόντα NovaStore"
+    : "Featured NovaStore products",
   locale
 )}
 </script>`
@@ -334,8 +342,8 @@ ${itemListJsonLd(
 ${itemListJsonLd(
   products,
   locale === "el"
-    ? "Προϊόντα Skanare"
-    : "Skanare products",
+    ? "Προϊόντα NovaStore"
+    : "NovaStore products",
   locale
 )}
 </script>`

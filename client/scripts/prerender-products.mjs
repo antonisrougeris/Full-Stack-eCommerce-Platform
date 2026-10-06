@@ -2,7 +2,11 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 const API_BASE = String(
-  process.env.VITE_API_BASE_URL || "https://skanare.com/api"
+  process.env.VITE_API_BASE_URL || "http://localhost:4000/api"
+).replace(/\/$/, "");
+
+const STORE_BASE = String(
+  process.env.VITE_STORE_URL || "http://localhost:5173"
 ).replace(/\/$/, "");
 
 const distDir = path.resolve("dist");
@@ -122,7 +126,7 @@ function itemListJsonLd(products, name) {
     itemListElement: products.map((product, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      url: `https://skanare.com${productUrl(product)}`,
+      url: `${STORE_BASE}${productUrl(product)}`,
       item: {
         "@type": "Product",
         name: product?.title || "",
@@ -146,7 +150,7 @@ async function fetchProducts(query = "") {
   const response = await fetch(url, {
     headers: {
       Accept: "application/json",
-      "User-Agent": "Skanare-Build-Prerender/1.0",
+      "User-Agent": "Commerce-Build-Prerender/1.0",
     },
   });
 
@@ -180,9 +184,9 @@ function replaceGrid(html, gridId, renderedCards) {
   return html.replace(
     pattern,
     `$1
-<!-- SKANARE_LIVE:GRID:${gridId}:START -->
+<!-- COMMERCE_LIVE:GRID:${gridId}:START -->
 ${renderedCards}
-<!-- SKANARE_LIVE:GRID:${gridId}:END -->
+<!-- COMMERCE_LIVE:GRID:${gridId}:END -->
 $2`
   );
 }
@@ -201,11 +205,11 @@ function hideLoadingMessage(html, loadingId) {
 
 function injectJsonLd(html, jsonLd, marker) {
   const block = `
-<!-- SKANARE_LIVE:JSONLD:${marker}:START -->
+<!-- COMMERCE_LIVE:JSONLD:${marker}:START -->
 <script type="application/ld+json" data-prerender="${marker}">
 ${jsonLd}
 </script>
-<!-- SKANARE_LIVE:JSONLD:${marker}:END -->
+<!-- COMMERCE_LIVE:JSONLD:${marker}:END -->
 `;
 
   if (!/<\/head>/i.test(html)) {
@@ -246,7 +250,7 @@ async function prerenderHomepage() {
 
   html = injectJsonLd(
     html,
-    itemListJsonLd([...tshirts, ...accessories], "Featured Skanare products"),
+    itemListJsonLd([...tshirts, ...accessories], "Featured products"),
     "homepage-products"
   );
 
