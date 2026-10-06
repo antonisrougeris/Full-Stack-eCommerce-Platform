@@ -88,7 +88,6 @@
     .drawer-item { display:grid; grid-template-columns:64px 1fr; gap:12px; align-items:start; padding:12px 0; border-bottom:1px solid #ecece7; }
     .drawer-item img { width:64px; height:64px; object-fit:cover; border:1px solid #ecece7; }
     .drawer-item__meta { color:#6b6b64; font-size:12px; margin-top:3px; }
-    .drawer-qr { padding:10px 12px; background:#f7f7f4; border:1px solid #e6e6e0; margin-top:8px; font-size:12px; }
     .warehouse-checklist { display:grid; gap:8px; }
     .warehouse-checklist label { display:flex; align-items:center; gap:9px; padding:8px 0; border-bottom:1px solid #efefeb; }
     .drawer-status-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
@@ -234,7 +233,6 @@
         <button class="admin-nav__item" data-view="messages" type="button"><span class="admin-nav__icon">✉</span><span>Messages</span><span id="messagesBadge" class="nav-badge" hidden></span></button>
         <button class="admin-nav__item" data-view="products" type="button"><span class="admin-nav__icon">□</span>Products</button>
         <button class="admin-nav__item" data-view="customers" type="button"><span class="admin-nav__icon">♙</span>Customers</button>
-        <button class="admin-nav__item" data-view="qr" type="button"><span class="admin-nav__icon">⌗</span>QR Codes</button>
         <button class="admin-nav__item" data-view="payments" type="button"><span class="admin-nav__icon">€</span>Payments</button>
       </nav>
 
@@ -259,7 +257,6 @@
           <article class="admin-stat"><span>Revenue</span><strong id="statRevenue">—</strong><small>Paid orders</small></article>
           <article class="admin-stat"><span>Orders</span><strong id="statOrders">—</strong><small>Total orders</small></article>
           <article class="admin-stat"><span>Customers</span><strong id="statCustomers">—</strong><small>Registered users</small></article>
-          <article class="admin-stat"><span>Active QRs</span><strong id="statQr">—</strong><small>Customer products</small></article>
         </div>
         <div class="admin-section">
           <div class="admin-section__header">
@@ -281,7 +278,7 @@
           <div>
             <span class="admin-eyebrow">Warehouse workflow</span>
             <h2>Fulfillment</h2>
-            <p>Prepare paid orders, verify the assigned QR, add the receipt and dispatch the parcel.</p>
+            <p>Prepare paid orders, verify items, add the receipt and dispatch the parcel.</p>
           </div>
           <button id="refreshFulfillment" class="admin-text-button" type="button">Refresh ↻</button>
         </div>
@@ -291,7 +288,7 @@
           <article class="admin-stat"><span>Preparing</span><strong id="fulfillmentPreparing">0</strong><small>In warehouse</small></article>
           <article class="admin-stat"><span>Ready</span><strong id="fulfillmentReady">0</strong><small>Waiting to ship</small></article>
           <article class="admin-stat"><span>Shipped</span><strong id="fulfillmentShipped">0</strong><small>Dispatched</small></article>
-          <article class="admin-stat"><span>Completed</span><strong id="fulfillmentCompleted">0</strong><small>Delivered by BOX NOW</small></article>
+          <article class="admin-stat"><span>Completed</span><strong id="fulfillmentCompleted">0</strong><small>Delivered</small></article>
         </div>
 
         <div id="fulfillmentList" class="fulfillment-list"></div>
@@ -324,7 +321,7 @@
           <div>
             <span class="admin-eyebrow">Reverse logistics</span>
             <h2>Returns</h2>
-            <p>Review requests, create BOX NOW return vouchers, receive parcels and record refunds.</p>
+            <p>Review return requests, receive parcels and record refunds.</p>
           </div>
           <button id="refreshReturns" class="admin-text-button" type="button">Refresh ↻</button>
         </div>
@@ -351,10 +348,9 @@
             <div>
               <span class="admin-eyebrow">Catalog & inventory</span>
               <h2>Products</h2>
-              <p class="product-toolbar-note">Made-to-order stock is set per size / option. Ready physical QR stock is created separately with “Add QR stock”.</p>
+              <p class="product-toolbar-note">Stock is managed per size / option. Use product variants to control sellable inventory.</p>
             </div>
             <div class="admin-actions">
-              <button id="openAddStockButton" class="admin-secondary-button" type="button">+ Add QR stock</button>
               <button id="addProductButton" class="admin-primary-button" type="button">+ Add product</button>
             </div>
           </div>
@@ -365,11 +361,6 @@
       <!-- CUSTOMERS -->
       <section id="view-customers" class="admin-view hidden">
         <div class="admin-section"><div class="admin-section__header"><div><span class="admin-eyebrow">Accounts</span><h2>Customers</h2></div></div><div id="customersList" class="admin-list"></div></div>
-      </section>
-
-      <!-- QR -->
-      <section id="view-qr" class="admin-view hidden">
-        <div class="admin-section"><div class="admin-section__header"><div><span class="admin-eyebrow">Dynamic links</span><h2>QR Codes</h2></div></div><div id="qrAdminList" class="admin-list"></div></div>
       </section>
 
       <!-- PAYMENTS -->
@@ -419,7 +410,7 @@
 
           <label class="admin-field">
             <span>Greek title</span>
-            <input id="productTitleEl" type="text" placeholder="Μπρελόκ QR" />
+            <input id="productTitleEl" type="text" placeholder="Καθημερινό αξεσουάρ" />
           </label>
 
           <label class="admin-field">
@@ -470,20 +461,6 @@
         <div class="admin-checkbox-row">
           <label><input id="productFeatured" type="checkbox" /> Show on homepage</label>
           <label><input id="productActive" type="checkbox" checked /> Active</label>
-          <label><input id="productCustomQr" type="checkbox" checked /> Custom product</label>
-        </div>
-
-        <div class="admin-subsection">
-          <div class="admin-subsection__header"><h3>QR print configuration</h3></div>
-          <div class="admin-form-grid--3 admin-form-grid">
-            <label class="admin-field"><span>Print text</span><input id="qrTextPrint" type="text" value="" placeholder="" /></label>
-            <label class="admin-field"><span>Text position</span><select id="qrTextPosition"><option value="bottom">Bottom</option><option value="top">Top</option></select></label>
-            <label class="admin-field"><span>Print size</span><input id="qrPrintSize" type="number" min="1" step="1" value="3540" /></label>
-          </div>
-          <div class="admin-form-grid">
-            <label class="admin-field"><span>QR color</span><input id="qrColor" type="text" value="#000000" /></label>
-            <label class="admin-field"><span>Text color</span><input id="qrTextColor" type="text" value="#000000" /></label>
-          </div>
         </div>
 
         <!-- Color variants own their pictures; legacy shared images remain an optional fallback. -->
@@ -500,7 +477,7 @@
               <button id="addColorOptionButton" class="admin-secondary-button" type="button">+ Add color</button>
             </div>
           </div>
-          <p class="variant-helper">Select the available colors and upload each color's own photos. Add sizes and made-to-order stock below. This does not generate QR inventory.</p>
+          <p class="variant-helper">Select the available colors and upload each color's own photos. Add sizes and made-to-order stock below. Stock is saved directly on each variant.</p>
           <label class="admin-field admin-default-color"><span>Default color (cover photo)</span><select id="productDefaultColor" aria-label="Default product color"></select></label>
           <div id="productColorEditor" class="admin-color-editor"></div>
           <p id="colorEditorStatus" class="admin-inline-status" aria-live="polite"></p>
@@ -529,8 +506,7 @@
             <button id="addVariantRowButton" class="admin-secondary-button" type="button">+ Add size / option</button>
           </div>
           <p class="variant-helper">
-            This is the small made-to-order stock you are willing to sell even when that exact QR is not already prepared.
-            It does <strong>not</strong> generate products. Ready physical QR inventory is created later with <strong>Add QR stock</strong>.
+            Set the sellable stock for each size or option.
             For T-shirts, add each color above; its size rows will be created automatically. Existing SKUs remain locked for inventory compatibility.
           </p>
           <div id="variantRows"></div>
@@ -550,39 +526,6 @@
     </section>
   </div>
 
-  <!-- QR STOCK MODAL -->
-  <div id="stockModal" class="admin-modal-shell hidden" aria-hidden="true">
-    <div class="admin-modal__backdrop" data-close-stock-modal></div>
-    <section class="admin-modal__panel" role="dialog" aria-modal="true" aria-labelledby="stockModalTitle" style="width:min(720px,96vw)">
-      <header class="admin-modal__header">
-        <div><span class="admin-eyebrow">Preprinted QR inventory</span><h2 id="stockModalTitle">Add QR stock</h2></div>
-        <button class="admin-icon-button" type="button" data-close-stock-modal>✕</button>
-      </header>
-      <form id="stockForm" class="admin-modal__body">
-        <label class="admin-field"><span>Product</span><select id="stockProductId" required></select></label>
-        <div class="admin-form-grid">
-          <label class="admin-field"><span>Color</span><select id="stockColorSelect"></select></label>
-          <label class="admin-field"><span>Size</span><select id="stockSizeSelect"></select></label>
-        </div>
-        <select id="stockVariantSelect" hidden aria-hidden="true"></select>
-
-        <input id="stockSku" type="hidden" />
-        <input id="stockSize" type="hidden" />
-        <input id="stockColor" type="hidden" />
-
-        <label class="admin-field"><span>How many ready QR items?</span><input id="stockQuantity" type="number" min="1" max="100" step="1" value="1" required /></label>
-        <div class="admin-detail-group">
-          <strong>What this does</strong>
-          <p class="admin-muted">Creates real ready QR inventory with status <b>available</b> for the selected size / option, plus the printable QR / A3 file. This is separate from made-to-order stock.</p>
-        </div>
-        <p id="stockFormStatus" class="admin-inline-status"></p>
-        <div class="admin-modal__footer">
-          <button class="admin-secondary-button" type="button" data-close-stock-modal>Cancel</button>
-          <button id="generateStockButton" class="admin-primary-button" type="submit">Generate QR stock</button>
-        </div>
-      </form>
-    </section>
-  </div>
 
   <script type="module" src="./admin.ts"></script>
 </body>
